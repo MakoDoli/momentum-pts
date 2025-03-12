@@ -1,6 +1,7 @@
-import localFont from "next/font/local";
 import "./globals.css";
 import { mediumFont } from "./fonts/fontWeigtht";
+import Header from "@/components/header/Header";
+import ReactQueryProvider from "@/providers/ReactQueryProvider";
 
 export const metadata = {
   title: "Momentum - Progress Tracking Software",
@@ -10,7 +11,12 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={`${mediumFont.className}  antialiased`}>{children}</body>
+      <body className={`${mediumFont.className}  antialiased px-[120px]`}>
+        <ReactQueryProvider>
+          <Header />
+          {children}
+        </ReactQueryProvider>
+      </body>
     </html>
   );
 }
