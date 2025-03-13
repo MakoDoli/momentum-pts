@@ -35,3 +35,57 @@ export async function getEmployees() {
     });
   }
 }
+
+export async function getTasks() {
+  try {
+    const response = await fetch(`${BASE_URL}/tasks`, {
+      method: "GET",
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    });
+    if (!response.ok) console.error("Request failed");
+    const data = await response.json();
+
+    return data;
+  } catch (err) {
+    console.error(err);
+    return NextResponse.json({ message: "Something went wrong" });
+  }
+}
+
+export async function getPriorities() {
+  try {
+    const response = await fetch(`${BASE_URL}/priorities`, {
+      method: "GET",
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    });
+    if (!response.ok) console.error("Request failed");
+    const data = await response.json();
+
+    return data;
+  } catch (err) {
+    console.error(err);
+    return NextResponse.json({ message: "Something went wrong" });
+  }
+}
+
+export async function getStatuses() {
+  try {
+    const response = await fetch(`${BASE_URL}/statuses`, {
+      method: "GET",
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    });
+    if (!response.ok) console.error("Request failed");
+    const data = await response.json();
+
+    return data;
+  } catch (err) {
+    console.error(err);
+    return NextResponse.json({ message: "Something went wrong" });
+  }
+}

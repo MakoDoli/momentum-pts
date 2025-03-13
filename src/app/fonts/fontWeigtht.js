@@ -11,7 +11,7 @@ export const slimFont = localFont({
 });
 
 export const boldFont = localFont({
-  src: "./firago-latin-700-normal.ttf",
+  src: "./firago-latin-600-normal.ttf",
   fallback: ["sans-serif"],
 });
 

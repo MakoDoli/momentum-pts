@@ -95,6 +95,10 @@ export default function CreateNewEmployee({ setOpen, departments }) {
                 value: 255,
                 message: "მაქსიმუმ 255 სიმბოლო",
               },
+              pattern: {
+                value: /^[ა-ჰa-zA-Z]+$/i, // Only Georgian and English letters
+                message: "მხოლოდ ასოებია ნებადართული", // Custom error message
+              },
             })}
           />
           {errors.name && (

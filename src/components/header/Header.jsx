@@ -19,12 +19,13 @@ export default async function Header() {
       </Link>
       <div className="w-[533px] h-10 flex gap-10 text-[16px]">
         <EmployeeModal departments={departments} />
-        <div
+        <Link
+          href="/create-task"
           className={`text-white ${slimFont.className} w-[268px] bg-primary-violet hover:bg-secondary-violet flex justify-center gap-1 items-center rounded-[5px] cursor-pointer hover-smooth`}
         >
           <Image src="/icons/add.png" width={20} height={20} alt="add-icon" />
           <p>შექმენი ახალი დავალება</p>
-        </div>
+        </Link>
       </div>
     </header>
   );
