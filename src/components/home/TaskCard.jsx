@@ -1,11 +1,37 @@
 "use client";
 import { slimFont } from "@/app/fonts/fontWeigtht";
-import { bgColor } from "@/data/constants";
+//import { bColor } from "@/data/constants";
 import Image from "next/image";
 import React from "react";
 import { format } from "date-fns";
 import { ka } from "date-fns/locale";
 import Link from "next/link";
+const bColor = {
+  notStarted: {
+    primary: "bg-primary-yellow",
+    secondary: "bg-secondary-yellow",
+    borderPrimary: "border-primary-yellow",
+    borderSecondary: "border-secondary-yellow",
+  },
+  inProgress: {
+    primary: "bg-primary-orange",
+    secondary: "bg-secondary-orange",
+    borderPrimary: "border-primary-orange",
+    borderSecondary: "border-secondary-orange",
+  },
+  forTesting: {
+    primary: "bg-primary-pink",
+    secondary: "bg-secondary-pink",
+    borderPrimary: "border-primary-pink",
+    borderSecondary: "border-secondary-pink",
+  },
+  completed: {
+    primary: "bg-primary-blue",
+    secondary: "bg-secondary-blue",
+    borderPrimary: "border-primary-blue",
+    borderSecondary: "border-secondary-blue",
+  },
+};
 
 export default function TaskCard({ task, statusName }) {
   const {
@@ -18,6 +44,15 @@ export default function TaskCard({ task, statusName }) {
     total_comments,
   } = task;
 
+  const num = Math.floor(Math.random() * 4 + 1);
+  const bgColor =
+    num === 1
+      ? "bg-secondary-pink"
+      : num === 2
+      ? "bg-secondary-orange"
+      : num === 3
+      ? "bg-secondary-yellow"
+      : "bg-secondary-blue";
   const depNameSplit = department.name.split(" ");
   const departmentName =
     depNameSplit[1][0] === "რ"
@@ -38,17 +73,17 @@ export default function TaskCard({ task, statusName }) {
 
   return (
     <Link
-      href="/task-details"
-      className={`w-[381px] h-[217px] rounded-[15px] p-5 border ${bgColor[statusName]?.borderPrimary}`}
+      href={`/${task.id}/task-details`}
+      className={`w-[381px] h-[217px] rounded-[15px] p-5 border ${bColor[statusName]?.borderPrimary}`}
     >
       <div className="flex justify-between h-6 items-center mb-[28px]">
-        <div className="flex gap-[9px] items-center">
+        <div className="flex gap-[10px] items-center">
           <div className="flex justify-center gap-1 w-[86px] items-center">
             <Image src={priority.icon} alt="priority" width={16} height={18} />
             <p className={`${priorityColor} text-[12px]`}>{priority.name}</p>
           </div>
           <div
-            className={`${slimFont.className} text-white px-[17px] py-[5px] rounded-[15px] ${bgColor[statusName]?.secondary}`}
+            className={`${slimFont.className} text-white px-[18px] py-[5px] text-[12px] rounded-[15px] ${bgColor}`}
           >
             {departmentName}
           </div>
@@ -63,7 +98,9 @@ export default function TaskCard({ task, statusName }) {
       <p
         className={`${slimFont.className} h-[34px] text-sm text-secondary-headlines mb-[28px]`}
       >
-        {description}
+        {description.length < 75
+          ? description
+          : description.substring(0, 75) + "..."}
       </p>
       <div className="flex justify-between items-center">
         <Image

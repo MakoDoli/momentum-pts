@@ -1,6 +1,6 @@
 export const BASE_URL = "https://momentum.redberryinternship.ge/api";
 
-export const bgColor = {
+export const bColor = {
   notStarted: {
     primary: "bg-primary-yellow",
     secondary: "bg-secondary-yellow",

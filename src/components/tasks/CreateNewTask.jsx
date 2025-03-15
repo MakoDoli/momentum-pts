@@ -141,7 +141,7 @@ export default function CreateNewTask({ departments, priorities, statuses }) {
     // formData.append("description", data.description);
     // formData.append("employee_id", Number(employee.id));
     // formData.append("priority_id", Number(priority.id));
-    // console.log(formData);
+
     setIsInitialState(false);
 
     // Validate Employee Selection

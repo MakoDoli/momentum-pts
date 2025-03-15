@@ -8,7 +8,7 @@ import { Controller, useForm } from "react-hook-form";
 
 import { slimFont, thinFont } from "@/app/fonts/fontWeigtht";
 import { useAddEmployee } from "@/hooks/useAddEmployese";
-import { useEmployees } from "@/hooks/useEmployees";
+
 import MinisSpinner from "../ui/MiniSpinner";
 //import MinisSpinner from "../ui/MiniSpinner";
 
@@ -22,7 +22,7 @@ export default function CreateNewEmployee({
     setIsModalOpen();
   };
   const { addNewEmployee, isPending } = useAddEmployee(onClose);
-  const { employees } = useEmployees();
+
   const { register, control, handleSubmit, formState, reset, watch } = useForm({
     defaultValues: {
       name: "",
