@@ -12,9 +12,14 @@ import { useEmployees } from "@/hooks/useEmployees";
 import MinisSpinner from "../ui/MiniSpinner";
 //import MinisSpinner from "../ui/MiniSpinner";
 
-export default function CreateNewEmployee({ setOpen, departments }) {
+export default function CreateNewEmployee({
+  setOpen,
+  departments,
+  setIsModalOpen,
+}) {
   const onClose = () => {
     setOpen();
+    setIsModalOpen();
   };
   const { addNewEmployee, isPending } = useAddEmployee(onClose);
   const { employees } = useEmployees();
@@ -59,13 +64,12 @@ export default function CreateNewEmployee({ setOpen, departments }) {
     formData.append("avatar", avatar);
     formData.append("department_id", data.department_id);
 
-    console.log(formData);
     setTimeout(() => {
       setOpen();
     }, 1000);
     addNewEmployee(formData);
   };
-  console.log(employees);
+
   return (
     <form
       className="flex flex-col gap-[45px]"
@@ -96,8 +100,8 @@ export default function CreateNewEmployee({ setOpen, departments }) {
                 message: "მაქსიმუმ 255 სიმბოლო",
               },
               pattern: {
-                value: /^[ა-ჰa-zA-Z]+$/i, // Only Georgian and English letters
-                message: "მხოლოდ ასოებია ნებადართული", // Custom error message
+                value: /^[ა-ჰa-zA-Z]+$/i,
+                message: "მხოლოდ ასოებია ნებადართული",
               },
             })}
           />

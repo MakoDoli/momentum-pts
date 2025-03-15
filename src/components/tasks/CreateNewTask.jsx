@@ -2,20 +2,24 @@
 "use client";
 
 import Image from "next/image";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useEmployees } from "@/hooks/useEmployees";
 import { useCreateNewTask } from "@/hooks/useCreateNewTask";
 import { useRouter } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
-import { FaAngleDown, FaAngleUp } from "react-icons/fa";
+import { FaAngleDown } from "react-icons/fa";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 import { slimFont, thinFont } from "@/app/fonts/fontWeigtht";
 import MiniSpinner from "@/components/ui/MiniSpinner";
-import AddNewEmployee from "./AddNewEmployee";
+
+import EmployeeList from "./EmployeeList";
+import PriorityList from "./PriorityList";
+import { format } from "date-fns";
 
 export default function CreateNewTask({ departments, priorities, statuses }) {
-  const storedData = JSON.parse(localStorage.getItem("TaskData"));
   const {
     control,
     register,
@@ -28,7 +32,6 @@ export default function CreateNewTask({ departments, priorities, statuses }) {
   } = useForm({
     defaultValues: {
       description: "",
-      status_id: storedData?.status_id || 0,
     },
   });
   const { createTask, isPending } = useCreateNewTask();
@@ -37,18 +40,18 @@ export default function CreateNewTask({ departments, priorities, statuses }) {
   const queryClient = useQueryClient();
   const router = useRouter();
   const [filteredEmployees, setFilteredEmployees] = useState([]);
-  const [isSelectOpen, setIsSelectOpen] = useState(false);
-  const [employeeID, setEmployeeID] = useState("");
-  const [employeeName, setEmployeeName] = useState("თანამშრომლების სია");
-  const [avatarUrl, setAvatarUrl] = useState("");
+  const [employee, setEmployee] = useState({
+    id: "",
+    name: "თანამშრომლების სია",
+    avatar: "",
+  });
+  const [priority, setPriority] = useState({});
+  const [showPriorityError, setShowPriorityError] = useState(false);
   const [showEmployeeError, setShowEmployeeError] = useState(false);
   const [isRestoring, setIsRestoring] = useState(true);
   const [isInitialState, setIsInitialState] = useState(true);
   const [employeesList, setEmployeesList] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const buttonRef = useRef(null);
-  const contentRef = useRef(null);
 
   useEffect(() => {
     setEmployeesList(employees);
@@ -56,22 +59,18 @@ export default function CreateNewTask({ departments, priorities, statuses }) {
 
   const changedDepartment = watch("department_id");
   useEffect(() => {
+    const storedPriority = JSON.parse(localStorage.getItem("priority"));
     if (changedDepartment === undefined) {
-      const storedEmployeeID = JSON.parse(localStorage.getItem("employeeID"));
-      const storedEmployeeName = JSON.parse(
-        localStorage.getItem("employeeName")
-      );
-      const storedAvatarUrl = JSON.parse(localStorage.getItem("avatarUrl"));
+      const storedEmployee = JSON.parse(localStorage.getItem("employee"));
 
-      if (storedEmployeeID) setEmployeeID(storedEmployeeID);
-      if (storedEmployeeName) setEmployeeName(storedEmployeeName);
-      if (storedAvatarUrl) setAvatarUrl(storedAvatarUrl);
+      if (storedEmployee) setEmployee(storedEmployee);
+      if (storedPriority) setPriority(storedPriority);
     }
     setTimeout(() => setIsRestoring(false), 5000);
   }, [changedDepartment]);
 
   useEffect(() => {
-    //const storedData = JSON.parse(localStorage.getItem("TaskData"));
+    const storedData = JSON.parse(localStorage.getItem("TaskData"));
 
     if (storedData) {
       setFilteredEmployees(
@@ -81,8 +80,13 @@ export default function CreateNewTask({ departments, priorities, statuses }) {
       );
     }
     if (!isRestoring && changedDepartment !== undefined) {
-      setAvatarUrl("");
-      setEmployeeName("თანამშრომლების სია");
+      setEmployee({
+        ...employee,
+        id: "",
+        name: "თანამშრომლების სია",
+        avatar: "",
+      });
+      localStorage.removeItem("employee");
     }
 
     if (!storedData && changedDepartment) {
@@ -91,8 +95,12 @@ export default function CreateNewTask({ departments, priorities, statuses }) {
           (emp) => emp.department.id === parseInt(changedDepartment)
         )
       );
-      setEmployeeName("თანამშრომლების სია");
-      setAvatarUrl("");
+      setEmployee({
+        ...employee,
+        id: "",
+        name: "თანამშრომლების სია",
+        avatar: "",
+      });
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -107,7 +115,7 @@ export default function CreateNewTask({ departments, priorities, statuses }) {
       reset(parsedData);
     }
   }, [reset, setValue, trigger]);
-  // Save the form data to local storage whenever a field changes
+
   useEffect(() => {
     const subscription = watch((value) => {
       localStorage.setItem("TaskData", JSON.stringify(value));
@@ -116,47 +124,95 @@ export default function CreateNewTask({ departments, priorities, statuses }) {
     return () => subscription.unsubscribe();
   }, [watch]);
 
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (isModalOpen) return;
-      if (
-        buttonRef.current &&
-        !buttonRef.current.contains(event.target) &&
-        contentRef.current &&
-        !contentRef.current.contains(event.target)
-      ) {
-        setIsSelectOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [isModalOpen]);
-
   const submitFunction = (data) => {
+    // setIsInitialState(false);
+    // if (employee.name === "თანამშრომლების სია") {
+    //   setShowEmployeeError(true);
+    //   return;
+    // }
+    // if (priority.name === "") {
+    //   setShowPriorityError(true);
+    //   return;
+    // }
+    // const formData = new FormData();
+
+    // formData.append("name", data.name);
+    // formData.append("department_id", data.department_id);
+    // formData.append("description", data.description);
+    // formData.append("employee_id", Number(employee.id));
+    // formData.append("priority_id", Number(priority.id));
+    // console.log(formData);
     setIsInitialState(false);
-    if (employeeName === "თანამშრომლების სია") {
+
+    // Validate Employee Selection
+    if (employee.name === "თანამშრომლების სია") {
       setShowEmployeeError(true);
       return;
     }
+
+    // Validate Priority Selection
+    if (!priority?.id) {
+      setShowPriorityError(true);
+      return;
+    }
+
+    // Format due_date
+    const formattedDate = data.due_date
+      ? format(new Date(data.due_date), "yyyy-MM-dd")
+      : null;
+
+    // Construct JSON payload
+    // const formattedData = {
+    //   id: Math.floor(Math.random() * 9999) + 1,
+    //   name: data.name,
+    //   description: data.description,
+    //   due_date: formattedDate,
+    //   status: {
+    //     id: Number(data.status_id),
+    //     name:
+    //       statuses.filter((status) => status.id === Number(data.status_id))[0]
+    //         ?.name || "",
+    //   },
+    //   priority: {
+    //     id: priority.id,
+    //     name: priority.name,
+    //     icon: priority.icon,
+    //   },
+    //   department: {
+    //     id: Number(data.department_id),
+    //     name:
+    //       departments.filter((dep) => dep.id === Number(data.department_id))[0]
+    //         ?.name || "",
+    //   },
+    //   employee: {
+    //     id: employee.id,
+    //     name: employee.name.split(" ")[0],
+    //     surname: employee.name.split(" ")[1],
+    //     avatar: employee.avatar,
+    //     department_id: Number(data.department_id),
+    //   },
+    // };
     const formData = new FormData();
 
     formData.append("name", data.name);
-    formData.append("department_id", data.department_id);
-    formData.append("employee_id", Number(employeeID));
     formData.append("description", data.description);
-    console.log(formData);
+    formData.append("employee_id", employee.id);
+    formData.append("priority_id", priority.id);
+    formData.append("status_id", data.status_id);
+    formData.append("due_date", formattedDate);
 
-    // createTask(formData, {
-    //   onSuccess: () => {
-    //     queryClient.invalidateQueries({
-    //       queryKey: ["tasks"],
-    //     });
-    //     localStorage.removeItem("TaskData");
-    //     localStorage.removeItem("TaskImage");
-    //     localStorage.removeItem("TaskImageName");
-    //     router.push("/");
-    //   },
-    // });
+    createTask(formData, {
+      onSuccess: () => {
+        queryClient.invalidateQueries({
+          queryKey: ["tasks"],
+        });
+        localStorage.removeItem("TaskData");
+        localStorage.removeItem("employee");
+        localStorage.removeItem("priority");
+
+        router.push("/");
+      },
+    });
   };
 
   return (
@@ -358,200 +414,70 @@ export default function CreateNewTask({ departments, priorities, statuses }) {
             </div>
             <div className="flex flex-col ">
               {changedDepartment && changedDepartment !== "" && (
-                <div className="flex flex-col gap-1 w-[550px] h-[64px] ">
-                  <label
-                    className={`${slimFont.className} text-[16px] text-secondary-headlines`}
-                    htmlFor="employee_id"
-                  >
-                    პასუხისმგებელი თანამშრომელი
-                  </label>
-
-                  <div
-                    className={`${slimFont.className} relative text-[14px] `}
-                  >
-                    <div
-                      ref={buttonRef}
-                      onClick={() => setIsSelectOpen((prev) => !prev)}
-                      className={`${
-                        slimFont.className
-                      } text-[14px] w-[550px]  h-[45px] border ${
-                        showEmployeeError ? "border-red-500" : "border-gray-400"
-                      } ${
-                        isSelectOpen
-                          ? "border-b-0 rounded-t-[5px]"
-                          : "rounded-[5px]"
-                      }  flex items-center px-3 cursor-pointer justify-between relative`}
-                    >
-                      <div className="flex gap-2 items-center">
-                        {avatarUrl && (
-                          <Image
-                            src={avatarUrl}
-                            width={28}
-                            height={28}
-                            alt="employee avatar"
-                            className="rounded-full"
-                          />
-                        )}
-                        <p
-                          className={`${thinFont.className} text-primary-headlines`}
-                        >
-                          {employeeName}
-                        </p>
-                      </div>
-
-                      {isSelectOpen ? <FaAngleUp /> : <FaAngleDown />}
-                    </div>
-                    {isSelectOpen && (
-                      <div
-                        className="w-[550px] border overflow-y-auto overflow-x-hidden h-[168px] absolute  border-gray-400 rounded-b-lg"
-                        ref={contentRef}
-                      >
-                        <AddNewEmployee
-                          setModal={() => setIsModalOpen((prev) => !prev)}
-                        />
-                        {filteredEmployees?.reverse()?.map((emp) => (
-                          <div
-                            key={emp.id}
-                            className={`flex  px-3 gap-2 h-[42px]   hover:bg-gray-100 items-center`}
-                            onClick={() => {
-                              setIsSelectOpen(false);
-                              setEmployeeID(emp.id);
-                              setEmployeeName(emp.name + " " + emp.surname);
-                              setAvatarUrl(emp.avatar);
-                              localStorage.setItem(
-                                "employeeID",
-                                JSON.stringify(emp.id)
-                              );
-                              localStorage.setItem(
-                                "employeeName",
-                                JSON.stringify(emp.name + " " + emp.surname)
-                              );
-                              localStorage.setItem(
-                                "avatarUrl",
-                                JSON.stringify(emp.avatar)
-                              );
-                            }}
-                          >
-                            <Image
-                              src={emp.avatar}
-                              width={28}
-                              height={28}
-                              alt="employee avatar"
-                              className="rounded-full"
-                            />
-                            <p>{emp.name + " " + emp.surname}</p>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                </div>
+                <EmployeeList
+                  filteredEmployees={filteredEmployees}
+                  isModalOpen={isModalOpen}
+                  setIsModalOpen={setIsModalOpen}
+                  showEmployeeError={showEmployeeError}
+                  employee={employee}
+                  setEmployee={setEmployee}
+                  departments={departments}
+                />
               )}
             </div>
           </div>
-
-          <div className="flex gap-8 mt-[61px] ">
-            <div className="flex relative flex-col gap-1 w-[259px] h-[64px]">
-              <label
-                htmlFor="priority_id"
-                className={`${slimFont.className} text-[16px] text-secondary-headlines`}
-              >
-                პრიორიტეტი*{" "}
-              </label>
-              <Controller
-                name="priority_id"
-                control={control}
-                rules={{ required: "აირჩიეთ პრიორიტეტი" }}
-                render={({ field }) => (
-                  <>
-                    <select
-                      {...field}
-                      className={`${
-                        slimFont.className
-                      } outline-none appearance-none border border-1  ${
-                        errors.priority_id
-                          ? "border-red-500"
-                          : "border-gray-400"
-                      } rounded-[5px] p-3 relative  text-[14px] h-[45px] `}
-                      value={field.value}
-                      id="priority_id"
-                    >
-                      <option value=""></option>
-                      {priorities?.map((pr) => (
-                        <div key={pr.id} className="flex rounded-[5px]">
-                          <option
-                            key={pr.id}
-                            className={`${slimFont.className} `}
-                            value={pr.id}
-                          >
-                            {pr.name}
-                          </option>
-                        </div>
-                      ))}
-                    </select>
-                    <span className="absolute right-3 top-2/3 transform pointer-events-none ">
-                      <FaAngleDown className="w-[14px] h-[14px]"></FaAngleDown>
-                    </span>
-                  </>
-                )}
+          <div className="flex gap=[161px] mt-[61px]">
+            <div className="flex gap-8  ">
+              <PriorityList
+                priorities={priorities}
+                priority={priority}
+                setShowPriorityError={setShowPriorityError}
+                showPriorityError={showPriorityError}
+                setPriority={setPriority}
               />
-              {errors.priority_id && (
-                <p
-                  className={`${slimFont.className} text-red-500 text-xs flex items-center gap-2`}
+
+              <div className="flex relative flex-col gap-1 w-[259px] h-[64px]">
+                <label
+                  htmlFor="status_id"
+                  className={`${slimFont.className} text-[16px] text-secondary-headlines`}
                 >
-                  <span>
-                    <Image
-                      src="/icons/red-check.png"
-                      width={10}
-                      height={8}
-                      alt="check"
-                    />
-                  </span>
-                  {errors.priority_id?.message}
-                </p>
-              )}
-            </div>
-
-            <div className="flex relative flex-col gap-1 w-[259px] h-[64px]">
-              <label
-                htmlFor="status_id"
-                className={`${slimFont.className} text-[16px] text-secondary-headlines`}
-              >
-                სტატუსი*{" "}
-              </label>
-              <Controller
-                name="status_id"
-                control={control}
-                rules={{ required: "აირჩიეთ სტატუსი" }}
-                render={({ field }) => (
-                  <>
-                    <select
-                      {...field}
-                      className={`${
-                        slimFont.className
-                      } outline-none appearance-none border border-1  ${
-                        errors.status_id ? "border-red-500" : "border-gray-400"
-                      } rounded-[5px] p-3 relative  text-[14px] h-[45px] `}
-                      value={field.value ?? 0}
-                      id="department_id"
-                    >
-                      {statuses?.map((status) => (
-                        <option
-                          key={status.id}
-                          className={`${slimFont.className} `}
-                          value={status.id}
-                        >
-                          {status.name}
-                        </option>
-                      ))}
-                    </select>
-                    <span className="absolute right-3 top-2/3 transform pointer-events-none ">
-                      <FaAngleDown className="w-[14px] h-[14px]"></FaAngleDown>
-                    </span>
-                  </>
-                )}
-              />
-              {errors.status_id && (
+                  სტატუსი*{" "}
+                </label>
+                <Controller
+                  name="status_id"
+                  control={control}
+                  rules={{ required: "აირჩიეთ სტატუსი" }}
+                  render={({ field }) => (
+                    <>
+                      <select
+                        {...field}
+                        className={`${
+                          slimFont.className
+                        } outline-none appearance-none border border-1  ${
+                          errors.status_id
+                            ? "border-red-500"
+                            : "border-gray-400"
+                        } rounded-[5px] p-3 relative  text-[14px] h-[45px] `}
+                        value={field.value ?? 1}
+                        id="department_id"
+                      >
+                        {statuses?.map((status) => (
+                          <option
+                            key={status.id}
+                            className={`${slimFont.className} `}
+                            value={status.id}
+                          >
+                            {status.name}
+                          </option>
+                        ))}
+                      </select>
+                      <span className="absolute right-3 top-2/3 transform pointer-events-none ">
+                        <FaAngleDown className="w-[14px] h-[14px]"></FaAngleDown>
+                      </span>
+                    </>
+                  )}
+                />
+                {/* {errors.status_id && (
                 <p
                   className={`${slimFont.className} text-red-500 text-xs flex items-center gap-2`}
                 >
@@ -565,6 +491,55 @@ export default function CreateNewTask({ departments, priorities, statuses }) {
                   </span>
                   {errors.status_id?.message}
                 </p>
+              )} */}
+              </div>
+            </div>
+            <div className="flex flex-col relative gap-1 w-[318px] ml-[161px] h-[64px]">
+              <label
+                htmlFor="date"
+                className={`${slimFont.className} text-[16px] text-secondary-headlines`}
+              >
+                დედლაინი*
+              </label>
+              <img
+                src="/icons/calendar.svg"
+                alt="calendar"
+                className="absolute top-11 left-4 z-10 "
+              />
+              <Controller
+                control={control}
+                name="due_date"
+                rules={{ required: "აირჩიეთ თარიღი" }}
+                render={({ field }) => (
+                  <DatePicker
+                    {...field}
+                    selected={field.value}
+                    onChange={(date) => field.onChange(date)}
+                    dateFormat="dd/MM/yyyy"
+                    placeholderText="DD/MM/YYYY"
+                    calendarClassName="custom-calendar"
+                    className={`outline-none border ${
+                      errors.due_date ? "border-red-500" : "border-gray-400"
+                    } rounded-[5px] pl-9 ${
+                      thinFont.className
+                    } text-primary-headlines custom-datepicker h-[45px] w-full`}
+                  />
+                )}
+              />
+              {errors.due_date && (
+                <p
+                  className={`${slimFont.className} text-red-500 text-xs flex items-center gap-2`}
+                >
+                  <span>
+                    <Image
+                      src="/icons/red-check.png"
+                      width={10}
+                      height={8}
+                      alt="check"
+                    />
+                  </span>
+                  {errors.due_date?.message}
+                </p>
               )}
             </div>
           </div>
@@ -576,8 +551,8 @@ export default function CreateNewTask({ departments, priorities, statuses }) {
             className="border p-3 text-[16px] rounded-[5px]   hover:text-white"
             onClick={() => {
               localStorage.removeItem("TaskData");
-              localStorage.removeItem("employeeName");
-
+              localStorage.removeItem("employee");
+              localStorage.removeItem("priority");
               router.push("/");
             }}
           >

@@ -7,6 +7,7 @@ import { getDepartments } from "@/service/data-service";
 
 export default async function Header() {
   const departments = await getDepartments();
+
   return (
     <header className="h-[100px] flex items-center justify-between sticky">
       <Link href="/">

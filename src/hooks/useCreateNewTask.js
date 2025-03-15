@@ -5,9 +5,9 @@ export function useCreateNewTask() {
   const queryClient = useQueryClient();
   const { mutate: createTask, isPending } = useMutation({
     mutationFn: createNewTask,
-    onSuccess: () => {
-      queryClient.invalidateQueries(["tasks"]);
-    },
+    // onSuccess: () => {
+    //   queryClient.invalidateQueries(["tasks"]);
+    // },
   });
 
   return { createTask, isPending };

@@ -6,7 +6,7 @@ export function useAddEmployee() {
   const { mutate: addNewEmployee, isPending } = useMutation({
     mutationFn: createNewEmployee,
     onSuccess: () => {
-      console.log("✅ Mutation SUCCESS!");
+      
       queryClient.invalidateQueries({ queryKey: ["employees"] });
     },
   });

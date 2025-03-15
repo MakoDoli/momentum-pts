@@ -12,15 +12,15 @@ import {
 import CreateNewEmployee from "../employee/CreateNewEmployee";
 import { slimFont } from "@/app/fonts/fontWeigtht";
 
-export default function AddNewEmployee({ setModal }) {
+export default function AddNewEmployee({ setIsModalOpen }) {
   const [open, setOpen] = useState(false);
   return (
-    <Dialog onOpenChange={setModal}>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger>
         <div
           className="flex  cursor-pointer  px-3 w-[550px] gap-2 h-[45px] items-center hover:bg-secondary-form"
           onClick={() => {
-            setModal();
+            setIsModalOpen(true);
             setOpen(true);
           }}
         >
@@ -44,7 +44,10 @@ export default function AddNewEmployee({ setModal }) {
               <p id="agent-form-description" className="sr-only">
                 create new employee
               </p>
-              <CreateNewEmployee setOpen={() => setOpen(false)} />
+              <CreateNewEmployee
+                setOpen={() => setOpen(false)}
+                setIsModalOpen={() => setIsModalOpen(false)}
+              />
             </section>
           </DialogDescription>
         </DialogContent>

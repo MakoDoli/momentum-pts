@@ -1,7 +1,9 @@
 import { BASE_URL } from "@/data/constants";
+import { token } from "@/data/token";
 import { NextResponse } from "next/server";
 
 export async function createNewTask(payload) {
+  
   try {
     const response = await fetch(`${BASE_URL}/tasks`, {
       method: "POST",
@@ -21,7 +23,7 @@ export async function createNewTask(payload) {
 
     const data = await response.json();
 
-    return data;
+    return NextResponse.json({ data }, { status: 201 });
   } catch (err) {
     console.error(err);
     return NextResponse.json(

@@ -8,11 +8,8 @@
   }
 }
 
-
-
 @layer base {
   :root {
-
     --background: 0 0% 100%;
 
     --foreground: 0 0% 3.9%;
@@ -61,10 +58,9 @@
 
     --chart-5: 27 87% 67%;
 
-    --radius: 0.5rem
+    --radius: 0.5rem;
   }
   .dark {
-
     --background: 0 0% 3.9%;
 
     --foreground: 0 0% 98%;
@@ -111,11 +107,9 @@
 
     --chart-4: 280 65% 60%;
 
-    --chart-5: 340 75% 55%
+    --chart-5: 340 75% 55%;
   }
 }
-
-
 
 @layer base {
   * {
@@ -124,4 +118,34 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+.custom-datepicker {
+  border: 1px solid #dee2e6;
+  border-radius: 5px;
+
+  font-size: 16px;
+  outline: none;
+  width: 100%;
+}
+
+/* Calendar styles */
+.custom-calendar {
+  background-color: white;
+  border-radius: 10px;
+  padding: 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Highlight selected date */
+.react-datepicker__day--selected {
+  background-color: #8338ec !important; /* Purple */
+  color: white !important;
+  border-radius: 5px;
+}
+
+/* Hover effect */
+.react-datepicker__day:hover {
+  background-color: #ddd !important;
+  border-radius: 50%;
 }
