@@ -19,7 +19,6 @@ export default function StatusSelect({ statuses, status, taskId }) {
     const formData = new FormData();
 
     formData.append("status_id", statusId);
-    const payload = JSON.stringify({ status_id: statusId });
 
     changeStatus(formData);
     setIsSelectOpen(false);
@@ -63,7 +62,7 @@ export default function StatusSelect({ statuses, status, taskId }) {
         </div>
         {isSelectOpen && (
           <div
-            className="w-[259px] border overflow-y-auto overflow-x-hidden  absolute  border-gray-400 rounded-b-lg"
+            className="w-[259px] border overflow-y-auto overflow-x-hidden  absolute  border-gray-400 rounded-b-lg bg-white"
             ref={contentRef}
           >
             {statuses?.map((st) => (

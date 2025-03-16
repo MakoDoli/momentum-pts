@@ -106,3 +106,20 @@ export async function getTaskById(id) {
     return NextResponse.json({ message: "Something went wrong" });
   }
 }
+
+export async function getCommentsById(id) {
+  try {
+    const response = await fetch(`${BASE_URL}/tasks/${id}/comments`, {
+      method: "GET",
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    });
+    if (!response.ok) console.error("Request failed");
+    const data = await response.json();
+    return data;
+  } catch (err) {
+    console.error(err);
+    return NextResponse.json({ message: "Something went wrong" });
+  }
+}

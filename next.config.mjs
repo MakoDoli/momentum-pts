@@ -8,7 +8,20 @@ const nextConfig = {
         port: "",
         pathname: "/storage/employee-avatars/**",
       },
+      {
+        protocol: "https",
+        hostname: "momentum.redberryinternship.ge",
+        port: "",
+        pathname: "/storage/priority-icons/**",
+      },
+      {
+        protocol: "https",
+        hostname: "api.dicebear.com",
+        port: "",
+        pathname: "/9.x/thumbs/**",
+      },
     ],
+    dangerouslyAllowSVG: true,
   },
 };
 

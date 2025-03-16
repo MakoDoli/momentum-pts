@@ -7,7 +7,7 @@ export function useUpdateStatus() {
   const { mutate: changeStatus, isPending } = useMutation({
     mutationFn: updateStatus,
     onSuccess: () => {
-      queryClient.invalidateQueries(["statuses"]);
+      queryClient.invalidateQueries(["tasks"]);
       console.log("EGARIII");
     },
   });

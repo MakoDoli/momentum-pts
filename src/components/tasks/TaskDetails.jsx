@@ -48,104 +48,106 @@ export default async function TaskDetails({ task }) {
           {department.name}
         </div>
       </div>
-      <div className=" mt-3">
-        <div>
-          <h1
-            className={`${boldFont.className} text-[34px] text-primary-headlines`}
-          >
-            {name}
-          </h1>
-          <p
-            className={`w-[715px] h-[108px] ${slimFont.className} text-[18px] mt-[26px] `}
-          >
-            {description}
-          </p>
-        </div>
-
-        <div className="w-[293px] h-[277px] mt-[63px]">
-          <h2 className="text-[24px] text-primary-headlines">
-            დავალების დეტალები
-          </h2>
-          <div className="flex justify-between items-end mt-4 w-[493px]">
-            <div className="flex gap-[6px] h-6">
-              <Image
-                src="/icons/pie-chart.svg"
-                alt="pie-icon"
-                width={24}
-                height={24}
-              />
-              <p
-                className={`${slimFont.className} text-[16px] text-secondary-gray`}
-              >
-                სტატუსი
-              </p>
-            </div>
-            <StatusSelect
-              statuses={statuses}
-              status={status.name}
-              taskId={task.id}
-            />
-          </div>
-          <div className="flex items-center justify-between mt-[31px] h-[70px] w-[493px]">
-            <div className="flex gap-[6px] h-6">
-              <Image
-                src="/icons/empl.svg"
-                alt="pie-icon"
-                width={24}
-                height={24}
-              />
-              <p
-                className={`${slimFont.className} text-[16px] text-secondary-gray`}
-              >
-                თანამშრომელი
-              </p>
-            </div>
-            <div className="flex gap-[6px] w-[259px] h-[70px]">
-              <div className="flex justify-center items-center">
-                <Image
-                  src={employee.avatar}
-                  alt="avatar"
-                  width={32}
-                  height={32}
-                  className="rounded-full"
-                />
-              </div>
-              <div className="mt-2">
-                <p
-                  className={`${thinFont.className} text-secondary-gray text-[11px]`}
-                >
-                  {department.name}
-                </p>
-                <p
-                  className={`${slimFont.className} text-sm, text-secondary-headlines`}
-                >
-                  {employee.name} {employee.surname}
-                </p>
-              </div>
-            </div>
-          </div>
-          <div className="flex gap-[70px] items-end mt-4 w-[493px]">
-            <div className="flex gap-[6px] h-6">
-              <Image
-                src="/icons/calendar.svg"
-                alt="pie-icon"
-                width={24}
-                height={24}
-              />
-              <p
-                className={`${slimFont.className} text-[16px] text-secondary-gray`}
-              >
-                დავალების ვადა
-              </p>
-            </div>
-            <p
-              className={`${slimFont.className} text-sm text-secondary-blackish`}
+      <div className="flex justify-between">
+        <div className="  mt-3">
+          <div>
+            <h1
+              className={`${boldFont.className} text-[34px] text-primary-headlines`}
             >
-              {date}
+              {name}
+            </h1>
+            <p
+              className={`w-[715px] h-[108px] ${slimFont.className} text-[18px] mt-[26px] `}
+            >
+              {description}
             </p>
           </div>
+
+          <div className="w-[293px] h-[277px] mt-[63px]">
+            <h2 className="text-[24px] text-primary-headlines">
+              დავალების დეტალები
+            </h2>
+            <div className="flex justify-between items-end mt-4 w-[493px]">
+              <div className="flex gap-[6px] h-6">
+                <Image
+                  src="/icons/pie-chart.svg"
+                  alt="pie-icon"
+                  width={24}
+                  height={24}
+                />
+                <p
+                  className={`${slimFont.className} text-[16px] text-secondary-gray`}
+                >
+                  სტატუსი
+                </p>
+              </div>
+              <StatusSelect
+                statuses={statuses}
+                status={status.name}
+                taskId={task.id}
+              />
+            </div>
+            <div className="flex items-center justify-between mt-[31px] h-[70px] w-[493px]">
+              <div className="flex gap-[6px] h-6">
+                <Image
+                  src="/icons/empl.svg"
+                  alt="pie-icon"
+                  width={24}
+                  height={24}
+                />
+                <p
+                  className={`${slimFont.className} text-[16px] text-secondary-gray`}
+                >
+                  თანამშრომელი
+                </p>
+              </div>
+              <div className="flex gap-[6px] w-[259px] h-[70px]">
+                <div className="flex justify-center items-center">
+                  <Image
+                    src={employee.avatar}
+                    alt="avatar"
+                    width={32}
+                    height={32}
+                    className="rounded-full"
+                  />
+                </div>
+                <div className="mt-2">
+                  <p
+                    className={`${thinFont.className} text-secondary-gray text-[11px]`}
+                  >
+                    {department.name}
+                  </p>
+                  <p
+                    className={`${slimFont.className} text-sm, text-secondary-headlines`}
+                  >
+                    {employee.name} {employee.surname}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="flex gap-[70px] items-end mt-4 w-[493px]">
+              <div className="flex gap-[6px] h-6">
+                <Image
+                  src="/icons/calendar.svg"
+                  alt="pie-icon"
+                  width={24}
+                  height={24}
+                />
+                <p
+                  className={`${slimFont.className} text-[16px] text-secondary-gray`}
+                >
+                  დავალების ვადა
+                </p>
+              </div>
+              <p
+                className={`${slimFont.className} text-sm text-secondary-blackish`}
+              >
+                {date}
+              </p>
+            </div>
+          </div>
         </div>
-        <Comments />
+        <Comments taskId={task.id} />
       </div>
     </>
   );
