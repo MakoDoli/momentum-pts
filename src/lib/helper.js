@@ -8,3 +8,15 @@ export function formatDate(dateString) {
 
   return `${dayOfWeek} - ${formattedDate}`;
 }
+
+export const filterTasks = (filters, tasks) => {
+  return tasks.filter((task) => {
+    return filters.every((filter) => {
+      const taskValue = task[filter.type];
+      if (filter.type === "employee") {
+        return filter.value === `${taskValue.name} ${taskValue.surname}`;
+      }
+      return taskValue.name === filter.value;
+    });
+  });
+};

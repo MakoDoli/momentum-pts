@@ -3,6 +3,8 @@ import StatusTitles from "@/components/home/StatusTitles";
 import TasksContainer from "@/components/home/TasksContainer";
 import { getTasks } from "@/service/data-service";
 import { boldFont } from "./fonts/fontWeigtht";
+import FilterMenu from "@/components/filters/FilterMenu";
+import FilterContainer from "@/components/filters/FilterContainer";
 
 export default async function page() {
   const tasks = await getTasks();
@@ -14,6 +16,10 @@ export default async function page() {
       >
         დავალებების გვერდი
       </h1>
+      <FilterContainer>
+        <FilterMenu />
+      </FilterContainer>
+
       <StatusTitles />
       <TasksContainer tasks={tasks} />
     </div>
