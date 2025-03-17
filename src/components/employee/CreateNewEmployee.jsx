@@ -1,16 +1,12 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 import { useState, useEffect } from "react";
-
 import Image from "next/image";
 import React from "react";
 import { Controller, useForm } from "react-hook-form";
-
 import { slimFont, thinFont } from "@/app/fonts/fontWeigtht";
 import { useAddEmployee } from "@/hooks/useAddEmployese";
-
 import MinisSpinner from "../ui/MiniSpinner";
-//import MinisSpinner from "../ui/MiniSpinner";
 
 export default function CreateNewEmployee({
   setOpen,
@@ -21,9 +17,10 @@ export default function CreateNewEmployee({
     setOpen();
     setIsModalOpen();
   };
-  const { addNewEmployee, isPending } = useAddEmployee(onClose);
+  const { addNewEmployee, isPending } = useAddEmployee();
 
   const { register, control, handleSubmit, formState, reset, watch } = useForm({
+    mode: "onChange",
     defaultValues: {
       name: "",
       surname: "",
@@ -35,7 +32,10 @@ export default function CreateNewEmployee({
 
   const file = watch("avatar");
   const [filePreview, setFilePreview] = useState(null);
-  const [isInitialState, setIsInitialState] = useState(true);
+  const [isInitialState, setIsInitialState] = useState({
+    name: true,
+    surname: true,
+  });
 
   useEffect(() => {
     if (file && file[0]?.name) {
@@ -48,12 +48,9 @@ export default function CreateNewEmployee({
   }, [file]);
 
   const handleRemoveImage = (e) => {
-    //e.stopPropagation();
     e.preventDefault();
     setFilePreview(null);
     reset({ avatar: null });
-    // const avatar = document.getElementById("avatar");
-    // if (avatar) avatar.value = "";
   };
 
   const submitFunction = (data) => {
@@ -89,6 +86,7 @@ export default function CreateNewEmployee({
             } text-sm text-primary-headlines `}
             id="name"
             type="text"
+            autoFocus={false}
             {...register("name", {
               required: "მინიმუმ ორი სიმბოლო",
               minLength: {
@@ -103,49 +101,38 @@ export default function CreateNewEmployee({
                 value: /^[ა-ჰa-zA-Z]+$/i,
                 message: "მხოლოდ ასოებია ნებადართული",
               },
+              onChange: () =>
+                setIsInitialState({ ...isInitialState, name: false }),
             })}
           />
           {errors.name && (
-            <div>
-              <p
-                className={`${slimFont.className} text-red-500 text-xs flex items-center gap-2`}
-              >
-                <span>
-                  <Image
-                    src="/icons/red-check.png"
-                    width={10}
-                    height={8}
-                    alt="check"
-                  />
-                </span>
-                {errors.name?.message}
-              </p>
-              <p
-                className={`${slimFont.className} text-red-500 text-xs flex items-center gap-2`}
-              >
-                <span>
-                  <Image
-                    src="/icons/red-check.png"
-                    width={10}
-                    height={8}
-                    alt="check"
-                  />
-                </span>
-                {errors.name?.message}
-              </p>
-            </div>
+            <p
+              className={`${slimFont.className} text-red-500 text-xs flex items-center gap-2`}
+            >
+              <span>
+                <Image
+                  src="/icons/red-check.png"
+                  width={10}
+                  height={8}
+                  alt="check"
+                />
+              </span>
+              {errors.name?.message}
+            </p>
           )}
           {!errors.name && (
             <>
               <p
                 className={`${slimFont.className} ${
-                  isInitialState ? "text-primary-validation" : "text-green-600"
+                  isInitialState.name
+                    ? "text-primary-validation"
+                    : "text-primary-green"
                 } text-xs flex items-center gap-2`}
               >
                 <span>
                   <Image
                     src={
-                      isInitialState
+                      isInitialState.name
                         ? "/icons/check.png"
                         : "/icons/green-check.png"
                     }
@@ -158,7 +145,9 @@ export default function CreateNewEmployee({
               </p>
               <p
                 className={`${slimFont.className} ${
-                  isInitialState ? "text-primary-validation" : "text-green-600"
+                  isInitialState.name
+                    ? "text-primary-validation"
+                    : "text-primary-green"
                 } text-xs flex items-center gap-2`}
               >
                 <span>
@@ -206,49 +195,38 @@ export default function CreateNewEmployee({
                 value: /^[ა-ჰa-zA-Z]+$/i, // Only Georgian and English letters
                 message: "მხოლოდ ასოებია ნებადართული", // Custom error message
               },
+              onChange: () =>
+                setIsInitialState({ ...isInitialState, surname: false }),
             })}
           />
           {errors.surname && (
-            <div>
-              <p
-                className={`${slimFont.className} text-red-500 text-xs flex items-center gap-2`}
-              >
-                <span>
-                  <Image
-                    src="/icons/red-check.png"
-                    width={10}
-                    height={8}
-                    alt="check"
-                  />
-                </span>
-                {errors.surname?.message}
-              </p>
-              <p
-                className={`${slimFont.className} text-red-500 text-xs flex items-center gap-2`}
-              >
-                <span>
-                  <Image
-                    src="/icons/red-check.png"
-                    width={10}
-                    height={8}
-                    alt="check"
-                  />
-                </span>
-                {errors.surname?.message}
-              </p>
-            </div>
+            <p
+              className={`${slimFont.className} text-red-500 text-xs flex items-center gap-2`}
+            >
+              <span>
+                <Image
+                  src="/icons/red-check.png"
+                  width={10}
+                  height={8}
+                  alt="check"
+                />
+              </span>
+              {errors.surname?.message}
+            </p>
           )}
           {!errors.surname && (
             <div>
               <p
                 className={`${slimFont.className} ${
-                  isInitialState ? "text-primary-validation" : "text-green-600"
+                  isInitialState.surname
+                    ? "text-primary-validation"
+                    : "text-primary-green"
                 } text-xs flex items-center gap-2`}
               >
                 <span>
                   <Image
                     src={
-                      isInitialState
+                      isInitialState.surname
                         ? "/icons/check.png"
                         : "/icons/green-check.png"
                     }
@@ -261,13 +239,15 @@ export default function CreateNewEmployee({
               </p>
               <p
                 className={`${slimFont.className} ${
-                  isInitialState ? "text-primary-validation" : "text-green-600"
+                  isInitialState.surname
+                    ? "text-primary-validation"
+                    : "text-primary-green"
                 } text-xs flex items-center gap-2`}
               >
                 <span>
                   <Image
                     src={
-                      isInitialState
+                      isInitialState.surname
                         ? "/icons/check.png"
                         : "/icons/green-check.png"
                     }

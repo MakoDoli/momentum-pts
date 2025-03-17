@@ -8,9 +8,11 @@ import {
 } from "@/service/data-service";
 
 export default async function page() {
-  const departments = await getDepartments();
-  const priorities = await getPriorities();
-  const statuses = await getStatuses();
+  const [departments, priorities, statuses] = await Promise.all([
+    getDepartments(),
+    getPriorities(),
+    getStatuses(),
+  ]);
   return (
     <div>
       <h1

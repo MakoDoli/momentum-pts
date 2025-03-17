@@ -6,17 +6,13 @@ import { slimFont, thinFont } from "@/app/fonts/fontWeigtht";
 
 export default function EmployeeList({
   filteredEmployees,
-  setEmployeeID,
-  setEmployeeName,
-  setAvatarUrl,
   showEmployeeError,
-  employeeName,
-  avatarUrl,
   isModalOpen,
   setIsModalOpen,
   departments,
   employee,
   setEmployee,
+  setShowEmployeeError,
 }) {
   const buttonRef = useRef(null);
   const contentRef = useRef(null);
@@ -108,6 +104,7 @@ export default function EmployeeList({
                       avatar: emp.avatar,
                     })
                   );
+                  setShowEmployeeError(false);
                 }}
               >
                 <Image

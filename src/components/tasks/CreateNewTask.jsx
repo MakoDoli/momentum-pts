@@ -31,6 +31,7 @@ export default function CreateNewTask({ departments, priorities, statuses }) {
     setValue,
     trigger,
   } = useForm({
+    mode: "onChange",
     defaultValues: {
       description: "",
       status_id: 1,
@@ -47,7 +48,7 @@ export default function CreateNewTask({ departments, priorities, statuses }) {
     name: "თანამშრომლების სია",
     avatar: "",
   });
-  const [priority, setPriority] = useState({});
+  const [priority, setPriority] = useState(priorities[1]);
   const [showPriorityError, setShowPriorityError] = useState(false);
   const [showEmployeeError, setShowEmployeeError] = useState(false);
   const [isRestoring, setIsRestoring] = useState(true);
@@ -73,7 +74,6 @@ export default function CreateNewTask({ departments, priorities, statuses }) {
 
   useEffect(() => {
     const storedData = JSON.parse(localStorage.getItem("TaskData"));
-
     if (storedData) {
       setFilteredEmployees(
         employeesList?.filter(
@@ -90,7 +90,6 @@ export default function CreateNewTask({ departments, priorities, statuses }) {
       });
       localStorage.removeItem("employee");
     }
-
     if (!storedData && changedDepartment) {
       setFilteredEmployees(
         employeesList?.filter(
@@ -104,16 +103,13 @@ export default function CreateNewTask({ departments, priorities, statuses }) {
         avatar: "",
       });
     }
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [changedDepartment, reset, employeesList]);
 
   useEffect(() => {
     const savedData = localStorage.getItem("TaskData");
-
     if (savedData) {
       const parsedData = JSON.parse(savedData);
-
       reset(parsedData);
     }
   }, [reset, setValue, trigger]);
@@ -127,22 +123,19 @@ export default function CreateNewTask({ departments, priorities, statuses }) {
   }, [watch]);
 
   const submitFunction = (data) => {
+    console.log("erors:" + errors);
     setIsInitialState(false);
-
     if (employee.name === "თანამშრომლების სია") {
       setShowEmployeeError(true);
       return;
     }
-
     if (!priority?.id) {
       setShowPriorityError(true);
       return;
     }
-
     const formattedDate = data.due_date
       ? format(new Date(data.due_date), "yyyy-MM-dd")
       : null;
-
     const formData = new FormData();
 
     formData.append("name", data.name);
@@ -193,15 +186,16 @@ export default function CreateNewTask({ departments, priorities, statuses }) {
                   id="name"
                   type="text"
                   {...register("name", {
-                    required: "მინიმუმ 2 სიმბოლო",
+                    required: "მინიმუმ 3 სიმბოლო",
                     minLength: {
-                      value: 2,
-                      message: "მინიმუმ ორი სიმბოლო",
+                      value: 3,
+                      message: "მინიმუმ 3 სიმბოლო",
                     },
                     maxLength: {
                       value: 255,
                       message: "მაქსიმუმ 255 სიმბოლო",
                     },
+                    onChange: () => setIsInitialState(false),
                   })}
                 />
                 {errors.name && (
@@ -227,7 +221,7 @@ export default function CreateNewTask({ departments, priorities, statuses }) {
                       } text-xs flex items-center ${
                         isInitialState
                           ? "text-primary-validations"
-                          : "text-green-600"
+                          : "text-primary-green"
                       } gap-2`}
                     >
                       <span>
@@ -242,7 +236,7 @@ export default function CreateNewTask({ departments, priorities, statuses }) {
                           alt="check"
                         />
                       </span>
-                      მინიმუმ ორი სიმბოლო
+                      მინიმუმ 3 სიმბოლო
                     </p>
                     <p
                       className={`${
@@ -250,7 +244,7 @@ export default function CreateNewTask({ departments, priorities, statuses }) {
                       } text-xs flex items-center ${
                         isInitialState
                           ? "text-primary-validations"
-                          : "text-green-600"
+                          : "text-primary-green"
                       } gap-2`}
                     >
                       <span>
@@ -382,7 +376,7 @@ export default function CreateNewTask({ departments, priorities, statuses }) {
                 {!errors.description && watch("description")?.trim() && (
                   <p
                     className={`${slimFont.className} ${
-                      isInitialState ? "text-black" : "text-green-600"
+                      isInitialState ? "text-black" : "text-primary-green"
                     } text-xs flex items-center gap-2`}
                   >
                     <span>
@@ -412,6 +406,7 @@ export default function CreateNewTask({ departments, priorities, statuses }) {
                   employee={employee}
                   setEmployee={setEmployee}
                   departments={departments}
+                  setShowEmployeeError={setShowEmployeeError}
                 />
               )}
             </div>

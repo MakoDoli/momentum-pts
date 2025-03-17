@@ -98,9 +98,11 @@ export default function TaskCard({ task, statusName }) {
       <p
         className={`${slimFont.className} h-[34px] text-sm text-secondary-headlines mb-[28px]`}
       >
-        {description.length < 75
+        {description && description?.length < 75
           ? description
-          : description.substring(0, 75) + "..."}
+          : description && description?.length >= 75
+          ? description?.substring(0, 75) + "..."
+          : ""}
       </p>
       <div className="flex justify-between items-center">
         <Image
