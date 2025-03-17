@@ -136,7 +136,7 @@ export default function CreateNewEmployee({
             </div>
           )}
           {!errors.name && (
-            <div>
+            <>
               <p
                 className={`${slimFont.className} ${
                   isInitialState ? "text-primary-validation" : "text-green-600"
@@ -175,7 +175,7 @@ export default function CreateNewEmployee({
                 </span>
                 მაქსიმუმ 255 სიმბოლო
               </p>
-            </div>
+            </>
           )}
         </div>
 

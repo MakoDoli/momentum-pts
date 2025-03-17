@@ -17,7 +17,8 @@ import MiniSpinner from "@/components/ui/MiniSpinner";
 
 import EmployeeList from "./EmployeeList";
 import PriorityList from "./PriorityList";
-import { format } from "date-fns";
+import { addDays, format, parse } from "date-fns";
+import { revalidatePath } from "next/cache";
 
 export default function CreateNewTask({ departments, priorities, statuses }) {
   const {
@@ -32,6 +33,7 @@ export default function CreateNewTask({ departments, priorities, statuses }) {
   } = useForm({
     defaultValues: {
       description: "",
+      status_id: 1,
     },
   });
   const { createTask, isPending } = useCreateNewTask();
@@ -125,73 +127,22 @@ export default function CreateNewTask({ departments, priorities, statuses }) {
   }, [watch]);
 
   const submitFunction = (data) => {
-    // setIsInitialState(false);
-    // if (employee.name === "თანამშრომლების სია") {
-    //   setShowEmployeeError(true);
-    //   return;
-    // }
-    // if (priority.name === "") {
-    //   setShowPriorityError(true);
-    //   return;
-    // }
-    // const formData = new FormData();
-
-    // formData.append("name", data.name);
-    // formData.append("department_id", data.department_id);
-    // formData.append("description", data.description);
-    // formData.append("employee_id", Number(employee.id));
-    // formData.append("priority_id", Number(priority.id));
-
     setIsInitialState(false);
 
-    // Validate Employee Selection
     if (employee.name === "თანამშრომლების სია") {
       setShowEmployeeError(true);
       return;
     }
 
-    // Validate Priority Selection
     if (!priority?.id) {
       setShowPriorityError(true);
       return;
     }
 
-    // Format due_date
     const formattedDate = data.due_date
       ? format(new Date(data.due_date), "yyyy-MM-dd")
       : null;
 
-    // Construct JSON payload
-    // const formattedData = {
-    //   id: Math.floor(Math.random() * 9999) + 1,
-    //   name: data.name,
-    //   description: data.description,
-    //   due_date: formattedDate,
-    //   status: {
-    //     id: Number(data.status_id),
-    //     name:
-    //       statuses.filter((status) => status.id === Number(data.status_id))[0]
-    //         ?.name || "",
-    //   },
-    //   priority: {
-    //     id: priority.id,
-    //     name: priority.name,
-    //     icon: priority.icon,
-    //   },
-    //   department: {
-    //     id: Number(data.department_id),
-    //     name:
-    //       departments.filter((dep) => dep.id === Number(data.department_id))[0]
-    //         ?.name || "",
-    //   },
-    //   employee: {
-    //     id: employee.id,
-    //     name: employee.name.split(" ")[0],
-    //     surname: employee.name.split(" ")[1],
-    //     avatar: employee.avatar,
-    //     department_id: Number(data.department_id),
-    //   },
-    // };
     const formData = new FormData();
 
     formData.append("name", data.name);
@@ -211,6 +162,7 @@ export default function CreateNewTask({ departments, priorities, statuses }) {
         localStorage.removeItem("priority");
 
         router.push("/");
+        revalidatePath("/");
       },
     });
   };
@@ -234,17 +186,21 @@ export default function CreateNewTask({ departments, priorities, statuses }) {
 
                 <input
                   className={`outline-none border ${
-                    errors.name ? "border-red-500" : "border-gray-400 "
+                    errors.name ? "border-red-500" : "border-secondary-border "
                   } rounded-[5px] p-3 ${
                     thinFont.className
-                  } text-primary-headlines font-thin h-[45px]`}
+                  } text-primary-blackish font-thin h-[45px]`}
                   id="name"
                   type="text"
                   {...register("name", {
-                    required: "მინიმუმ ორი სიმბოლო",
+                    required: "მინიმუმ 2 სიმბოლო",
                     minLength: {
                       value: 2,
                       message: "მინიმუმ ორი სიმბოლო",
+                    },
+                    maxLength: {
+                      value: 255,
+                      message: "მაქსიმუმ 255 სიმბოლო",
                     },
                   })}
                 />
@@ -264,27 +220,54 @@ export default function CreateNewTask({ departments, priorities, statuses }) {
                   </p>
                 )}
                 {!errors.name && (
-                  <p
-                    className={`${
-                      slimFont.className
-                    } text-xs flex items-center ${
-                      isInitialState ? "text-black" : "text-green-600"
-                    } gap-2`}
-                  >
-                    <span>
-                      <Image
-                        src={
-                          isInitialState
-                            ? "/icons/check.png"
-                            : "/icons/green-check.png"
-                        }
-                        width={10}
-                        height={8}
-                        alt="check"
-                      />
-                    </span>
-                    მინიმუმ ორი სიმბოლო
-                  </p>
+                  <>
+                    <p
+                      className={`${
+                        slimFont.className
+                      } text-xs flex items-center ${
+                        isInitialState
+                          ? "text-primary-validations"
+                          : "text-green-600"
+                      } gap-2`}
+                    >
+                      <span>
+                        <Image
+                          src={
+                            isInitialState
+                              ? "/icons/check.png"
+                              : "/icons/green-check.png"
+                          }
+                          width={10}
+                          height={8}
+                          alt="check"
+                        />
+                      </span>
+                      მინიმუმ ორი სიმბოლო
+                    </p>
+                    <p
+                      className={`${
+                        slimFont.className
+                      } text-xs flex items-center ${
+                        isInitialState
+                          ? "text-primary-validations"
+                          : "text-green-600"
+                      } gap-2`}
+                    >
+                      <span>
+                        <Image
+                          src={
+                            isInitialState
+                              ? "/icons/check.png"
+                              : "/icons/green-check.png"
+                          }
+                          width={10}
+                          height={8}
+                          alt="check"
+                        />
+                      </span>
+                      მაქსიმუმ 255 სიმბოლო
+                    </p>
+                  </>
                 )}
               </div>
             </div>
@@ -306,19 +289,19 @@ export default function CreateNewTask({ departments, priorities, statuses }) {
                         <select
                           {...field}
                           className={`${
-                            slimFont.className
+                            thinFont.className
                           } outline-none appearance-none border border-1  ${
                             errors.department_id
                               ? "border-red-500"
-                              : "border-gray-400"
-                          } rounded-[5px] p-3 relative  text-[14px] h-[45px] `}
+                              : "border-secondary-border"
+                          } rounded-[5px] p-3 relative text-primary-blackish text-[14px] h-[45px] `}
                           id="department_id"
                         >
                           <option value=""></option>
                           {departments?.map((department) => (
                             <option
                               key={department.id}
-                              className={`${slimFont.className} `}
+                              className={`${thinFont.className} text-xs text-primary-blackish  `}
                               value={department.id}
                             >
                               {department.name}
@@ -356,22 +339,29 @@ export default function CreateNewTask({ departments, priorities, statuses }) {
             <div className="flex flex-col gap-[49px]">
               <div className="flex flex-col gap-1 w-[550px]">
                 <label
-                  htmlFor=""
+                  htmlFor="description"
                   className={`${slimFont.className} text-[16px] text-secondary-headlines`}
                 >
-                  აღწერა*
+                  აღწერა
                 </label>
 
                 <textarea
                   className={`${
                     thinFont.className
                   } text-sm outline-none border border-1  ${
-                    errors.description ? "border-red-500" : "border-gray-400"
+                    errors.description
+                      ? "border-red-500"
+                      : "border-secondary-border"
                   } rounded-[5px] p-3 h-[135px]`}
                   id="description"
                   {...register("description", {
-                    validate: (value) =>
-                      value.split(" ").length >= 6 || "მინიმუმ ხუთი სიტყვა",
+                    validate: (value) => {
+                      if (!value.trim()) return true;
+                      return (
+                        value.trim().split(/\s+/).length >= 4 ||
+                        "მინიმუმ ოთხი სიტყვა"
+                      );
+                    },
                   })}
                 />
                 {errors.description && (
@@ -389,7 +379,7 @@ export default function CreateNewTask({ departments, priorities, statuses }) {
                     {errors.description?.message}
                   </p>
                 )}
-                {!errors.description && (
+                {!errors.description && watch("description")?.trim() && (
                   <p
                     className={`${slimFont.className} ${
                       isInitialState ? "text-black" : "text-green-600"
@@ -407,7 +397,7 @@ export default function CreateNewTask({ departments, priorities, statuses }) {
                         alt="check"
                       />
                     </span>
-                    მინიმუმ ხუთი სიტყვა
+                    მინიმუმ ოთხი სიტყვა
                   </p>
                 )}
               </div>
@@ -446,7 +436,6 @@ export default function CreateNewTask({ departments, priorities, statuses }) {
                 <Controller
                   name="status_id"
                   control={control}
-                  rules={{ required: "აირჩიეთ სტატუსი" }}
                   render={({ field }) => (
                     <>
                       <select
@@ -456,15 +445,16 @@ export default function CreateNewTask({ departments, priorities, statuses }) {
                         } outline-none appearance-none border border-1  ${
                           errors.status_id
                             ? "border-red-500"
-                            : "border-gray-400"
+                            : "border-secondary-border"
                         } rounded-[5px] p-3 relative  text-[14px] h-[45px] `}
+                        {...register("status_id")}
                         value={field.value ?? 1}
                         id="department_id"
                       >
                         {statuses?.map((status) => (
                           <option
                             key={status.id}
-                            className={`${slimFont.className} `}
+                            className={`${thinFont.className} text-xs text-primary-blackish `}
                             value={status.id}
                           >
                             {status.name}
@@ -477,21 +467,6 @@ export default function CreateNewTask({ departments, priorities, statuses }) {
                     </>
                   )}
                 />
-                {/* {errors.status_id && (
-                <p
-                  className={`${slimFont.className} text-red-500 text-xs flex items-center gap-2`}
-                >
-                  <span>
-                    <Image
-                      src="/icons/red-check.png"
-                      width={10}
-                      height={8}
-                      alt="check"
-                    />
-                  </span>
-                  {errors.status_id?.message}
-                </p>
-              )} */}
               </div>
             </div>
             <div className="flex flex-col relative gap-1 w-[318px] ml-[161px] h-[64px]">
@@ -513,11 +488,16 @@ export default function CreateNewTask({ departments, priorities, statuses }) {
                 render={({ field }) => (
                   <DatePicker
                     {...field}
-                    selected={field.value}
+                    selected={
+                      field.value
+                        ? new Date(field.value)
+                        : addDays(new Date(), 1)
+                    }
                     onChange={(date) => field.onChange(date)}
                     dateFormat="dd/MM/yyyy"
                     placeholderText="DD/MM/YYYY"
                     calendarClassName="custom-calendar"
+                    minDate={new Date()}
                     className={`outline-none border ${
                       errors.due_date ? "border-red-500" : "border-gray-400"
                     } rounded-[5px] pl-9 ${

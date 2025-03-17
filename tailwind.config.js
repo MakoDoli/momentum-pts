@@ -35,6 +35,7 @@ module.exports = {
           headlines: "#343a40",
           validations: "#CED4DA",
           form: "#FBF9FFA6",
+          border: "#DEE2E6",
           gray: "#474747",
           DEFAULT: "hsl(var(--secondary))",
           foreground: "hsl(var(--secondary-foreground))",

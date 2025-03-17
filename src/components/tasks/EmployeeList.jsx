@@ -55,7 +55,7 @@ export default function EmployeeList({
           className={`${
             slimFont.className
           } text-[14px] w-[550px]  h-[45px] border ${
-            showEmployeeError ? "border-red-500" : "border-gray-400"
+            showEmployeeError ? "border-red-500" : "border-secondary-border"
           } ${
             isSelectOpen ? "border-b-0 rounded-t-[5px]" : "rounded-[5px]"
           }  flex items-center px-3 cursor-pointer justify-between relative`}
@@ -70,7 +70,9 @@ export default function EmployeeList({
                 className="rounded-full"
               />
             )}
-            <p className={`${thinFont.className} text-primary-headlines`}>
+            <p
+              className={`${thinFont.className} text-sm text-primary-blackish`}
+            >
               {employee.name}
             </p>
           </div>
@@ -79,7 +81,7 @@ export default function EmployeeList({
         </div>
         {isSelectOpen && (
           <div
-            className="w-[550px] border overflow-y-auto overflow-x-hidden h-[168px] absolute  border-gray-400 rounded-b-lg"
+            className="w-[550px] border overflow-y-auto overflow-x-hidden h-[168px] absolute  border-secondary-border rounded-b-lg"
             ref={contentRef}
           >
             <AddNewEmployee
@@ -92,9 +94,7 @@ export default function EmployeeList({
                 className={`flex  px-3 gap-2 h-[42px]   hover:bg-gray-100 items-center`}
                 onClick={() => {
                   setIsSelectOpen(false);
-                  // setEmployeeID(emp.id);
-                  // setEmployeeName(emp.name + " " + emp.surname);
-                  // setAvatarUrl(emp.avatar);
+
                   setEmployee({
                     id: emp.id,
                     name: emp.name + " " + emp.surname,
@@ -108,12 +108,6 @@ export default function EmployeeList({
                       avatar: emp.avatar,
                     })
                   );
-                  // localStorage.setItem("employeeID", JSON.stringify(emp.id));
-                  // localStorage.setItem(
-                  //   "employeeName",
-                  //   JSON.stringify(emp.name + " " + emp.surname)
-                  // );
-                  // localStorage.setItem("avatarUrl", JSON.stringify(emp.avatar));
                 }}
               >
                 <Image
@@ -123,7 +117,9 @@ export default function EmployeeList({
                   alt="employee avatar"
                   className="rounded-full"
                 />
-                <p>{emp.name + " " + emp.surname}</p>
+                <p className="text-primary-blackish">
+                  {emp.name + " " + emp.surname}
+                </p>
               </div>
             ))}
           </div>

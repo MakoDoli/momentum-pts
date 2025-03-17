@@ -112,7 +112,7 @@ export default function TaskCard({ task, statusName }) {
         />
         <div className="flex gap-1 items-center">
           <Image
-            src="/icons/comments.svg"
+            src="/icons/comment.svg"
             alt="comments"
             width={22}
             height={22}

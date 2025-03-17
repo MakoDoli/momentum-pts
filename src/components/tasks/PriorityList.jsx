@@ -49,7 +49,7 @@ export default function PriorityList({
           className={`${
             slimFont.className
           } text-[14px] w-[259px]  h-[45px] border ${
-            showPriorityError ? "border-red-500" : "border-gray-400"
+            showPriorityError ? "border-red-500" : "border-secondary-border"
           } ${
             isSelectOpen ? "border-b-0 rounded-t-[5px]" : "rounded-[5px]"
           }  flex items-center px-3 cursor-pointer justify-between relative`}
@@ -64,7 +64,7 @@ export default function PriorityList({
                 className="rounded-full"
               />
             )}
-            <p className={`${thinFont.className} text-primary-headlines`}>
+            <p className={`${thinFont.className} text-primary-blackish`}>
               {priority.name}
             </p>
           </div>
@@ -73,7 +73,7 @@ export default function PriorityList({
         </div>
         {isSelectOpen && (
           <div
-            className="w-[259px] border overflow-y-auto overflow-x-hidden  absolute  border-gray-400 rounded-b-lg"
+            className="w-[259px] border overflow-y-auto overflow-x-hidden  absolute  border-secondary-border rounded-b-lg"
             ref={contentRef}
           >
             {priorities?.reverse()?.map((pr) => (
@@ -96,7 +96,9 @@ export default function PriorityList({
                   alt="priority icon"
                   className="rounded-full"
                 />
-                <p>{pr.name}</p>
+                <p className={`${thinFont.className} text-primary-blackish `}>
+                  {pr.name}
+                </p>
               </div>
             ))}
           </div>

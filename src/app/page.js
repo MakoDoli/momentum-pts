@@ -10,9 +10,9 @@ export default async function page() {
   const tasks = await getTasks();
 
   return (
-    <div>
+    <div className="mt-[140px]">
       <h1
-        className={`${boldFont.className} text-[34px] text-primary-headlines mb-[52px] mt-10`}
+        className={`${boldFont.className} text-[34px] text-primary-headlines mb-[52px] `}
       >
         დავალებების გვერდი
       </h1>

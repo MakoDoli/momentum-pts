@@ -25,7 +25,7 @@ export default function TasksContainer({ tasks }) {
   const completed = filteredTasks.filter((t) => t.status.id === 4);
 
   return (
-    <div className="flex gap-[52px]">
+    <div className="flex gap-[52px] mb-[151px]">
       <TaskListings tasks={notStarted} status="notStarted" />
       <TaskListings tasks={inProgress} status="inProgress" />
       <TaskListings tasks={forTesting} status="forTesting" />

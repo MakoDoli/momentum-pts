@@ -9,7 +9,7 @@ export default async function Header() {
   const departments = await getDepartments();
 
   return (
-    <header className="h-[100px] flex items-center justify-between sticky">
+    <header className="h-[100px] bg-white flex items-center justify-between fixed inset-x-[120px] top-0 z-20">
       <Link href="/">
         <Image
           src="/logos/logo-main.png"
@@ -24,7 +24,7 @@ export default async function Header() {
           href="/create-task"
           className={`text-white ${slimFont.className} w-[268px] bg-primary-violet hover:bg-secondary-violet flex justify-center gap-1 items-center rounded-[5px] cursor-pointer hover-smooth`}
         >
-          <Image src="/icons/add.png" width={20} height={20} alt="add-icon" />
+          <Image src="/icons/add.svg" width={20} height={20} alt="add-icon" />
           <p>შექმენი ახალი დავალება</p>
         </Link>
       </div>
