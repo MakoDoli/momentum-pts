@@ -1,8 +1,9 @@
 "use client";
 import { slimFont, thinFont } from "@/app/fonts/fontWeigtht";
 import { useUpdateStatus } from "@/hooks/useUpdateStatus";
-import { updateStatus } from "@/service/apiStatus";
+
 import { useQueryClient } from "@tanstack/react-query";
+import { revalidatePath } from "next/cache";
 import React, { useEffect, useRef, useState } from "react";
 import { FaAngleDown, FaAngleUp } from "react-icons/fa";
 
@@ -11,16 +12,23 @@ export default function StatusSelect({ statuses, status, taskId }) {
   const buttonRef = useRef(null);
   const contentRef = useRef(null);
   const [isSelectOpen, setIsSelectOpen] = useState(false);
+  const [updatedStatus, setUpdatedStatus] = useState(status);
   const queryClient = useQueryClient();
 
   const updateStatus = (statusId) => {
-    console.log("CHANGING STATUS! to: " + statusId);
-
-    const formData = new FormData();
-
-    formData.append("status_id", statusId);
-
-    changeStatus(formData);
+    setUpdatedStatus(statuses.filter((st) => st.id === statusId)[0].name);
+    changeStatus(
+      { payload: { status_id: statusId }, taskId },
+      {
+        onSuccess: () => {
+          queryClient.invalidateQueries(["tasks"], {
+            refetchInactive: true,
+          });
+          revalidatePath("/");
+          revalidatePath(`/${taskId}/task-details`);
+        },
+      }
+    );
     setIsSelectOpen(false);
   };
 
@@ -39,6 +47,7 @@ export default function StatusSelect({ statuses, status, taskId }) {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
   return (
     <div className="flex flex-col gap-1 w-[259px]  ">
       <div className={`${slimFont.className} relative text-[14px] `}>
@@ -54,7 +63,7 @@ export default function StatusSelect({ statuses, status, taskId }) {
         >
           <div className="flex gap-2 items-center">
             <p className={`${thinFont.className} text-primary-headlines`}>
-              {status}
+              {updatedStatus}
             </p>
           </div>
 

@@ -2,22 +2,20 @@ import { BASE_URL } from "@/data/constants";
 import { token } from "@/data/token";
 import { NextResponse } from "next/server";
 
-export async function updateStatus(payload) {
+export async function updateStatus(formData) {
+  const { payload, taskId } = formData;
   try {
-    const response = await fetch(`${BASE_URL}/tasks/492`, {
+    const response = await fetch(`${BASE_URL}/tasks/${taskId}`, {
       method: "PUT",
       headers: {
         Authorization: "Bearer " + token,
+        "Content-Type": "application/json",
       },
-      body: payload,
+      body: JSON.stringify(payload),
     });
 
     if (!response.ok) {
       console.error("Request Failed");
-      return NextResponse.json(
-        { message: "Something went wrong" },
-        { status: 500 }
-      );
     }
 
     const data = await response.json();

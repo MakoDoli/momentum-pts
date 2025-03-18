@@ -1,7 +1,6 @@
-import { BASE_URL } from "@/data/constants";
-import { token } from "@/data/token";
 import { createCommentByTaskId } from "@/service/apiComment";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { revalidatePath } from "next/cache";
 
 export default function useAddComment() {
   const queryClient = useQueryClient();
@@ -9,7 +8,8 @@ export default function useAddComment() {
   const { mutate: addNewComment, isPending } = useMutation({
     mutationFn: createCommentByTaskId,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["employees"] });
+      queryClient.invalidateQueries({ queryKey: ["comments"] });
+      revalidatePath("/");
     },
   });
 

@@ -3,10 +3,12 @@ import React, { useContext, useEffect, useState } from "react";
 import TaskListings from "./TaskListings";
 import { FilterContext } from "@/providers/FilterProvider";
 import { filterTasks } from "@/lib/helper";
+import { useTasks } from "@/hooks/useTasks";
 
-export default function TasksContainer({ tasks }) {
+export default function TasksContainer() {
+  const { tasks } = useTasks();
   const { filters } = useContext(FilterContext);
-  const [filteredTasks, setFilteredTasks] = useState([]);
+  const [filteredTasks, setFilteredTasks] = useState(tasks);
   useEffect(() => {
     if (tasks) {
       if (filters.length > 0) {
@@ -19,10 +21,10 @@ export default function TasksContainer({ tasks }) {
     }
   }, [filters, tasks]);
 
-  const notStarted = filteredTasks.filter((t) => t.status.id === 1);
-  const inProgress = filteredTasks.filter((t) => t.status.id === 2);
-  const forTesting = filteredTasks.filter((t) => t.status.id === 3);
-  const completed = filteredTasks.filter((t) => t.status.id === 4);
+  const notStarted = filteredTasks?.filter((t) => t.status.id === 1);
+  const inProgress = filteredTasks?.filter((t) => t.status.id === 2);
+  const forTesting = filteredTasks?.filter((t) => t.status.id === 3);
+  const completed = filteredTasks?.filter((t) => t.status.id === 4);
 
   return (
     <div className="flex gap-[52px] mb-[151px]">

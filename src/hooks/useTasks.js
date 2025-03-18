@@ -1,7 +1,7 @@
 import { getTasks } from "@/service/data-service";
 import { useQuery } from "@tanstack/react-query";
 
-export function useListings() {
+export function useTasks() {
   const {
     data: tasks,
     isLoading,

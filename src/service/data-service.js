@@ -97,6 +97,8 @@ export async function getTaskById(id) {
       headers: {
         Authorization: "Bearer " + token,
       },
+      cache: "no-store",
+      next: { revalidate: 0 },
     });
     if (!response.ok) console.error("Request failed");
     const data = await response.json();

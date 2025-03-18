@@ -122,7 +122,6 @@ export default function CreateNewTask({ departments, priorities, statuses }) {
   }, [watch]);
 
   const submitFunction = (data) => {
-    console.log("erors:" + errors);
     setIsInitialState(false);
     if (employee.name === "თანამშრომლების სია") {
       setShowEmployeeError(true);

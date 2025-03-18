@@ -3,18 +3,28 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { slimFont, thinFont } from "@/app/fonts/fontWeigtht";
 import useAddComment from "@/hooks/useAddComment";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function CommentForm({ parentId, taskId }) {
   const { handleSubmit, formState, register } = useForm();
   const { errors, isSubmitting } = formState;
   const { addNewComment } = useAddComment();
+
   const submitFunction = (data) => {
+    const queryClient = useQueryClient();
     if (data.text.trim() === "") return;
 
-    const formData = new FormData();
-    formData.append("text", data.comment);
-    formData.append("parent_id", parentId);
-    addNewComment(formData);
+    addNewComment(
+      {
+        payload: { text: data.text, parent_id: parentId },
+        taskId,
+      },
+      {
+        onSuccess: () => {
+          queryClient.invalidateQueries({ queryKey: ["comments"] });
+        },
+      }
+    );
   };
   return (
     <form
@@ -24,7 +34,7 @@ export default function CommentForm({ parentId, taskId }) {
       <textarea
         name="text"
         className={`${thinFont.className} text-sm outline-none w-full  ${
-          errors.comment ? "border-red-500 border " : "border-none"
+          errors.text ? "border-red-500 border " : "border-none"
         }  min-h-[52px]`}
         placeholder="დაწერე კომენტარი"
         id="text"
