@@ -17,7 +17,7 @@ export default function EmployeeList({
   const contentRef = useRef(null);
   const [isSelectOpen, setIsSelectOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  console.log(isModalOpen);
+
   useEffect(() => {
     if (isModalOpen) return;
     const handleClickOutside = (event) => {

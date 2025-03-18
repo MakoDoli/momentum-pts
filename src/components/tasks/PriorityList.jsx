@@ -33,7 +33,9 @@ export default function PriorityList({
   return (
     <div className="flex flex-col gap-1 w-[259px] h-[64px] ">
       <label
-        className={`${slimFont.className} text-[16px] text-secondary-headlines`}
+        className={`${slimFont.className} text-[16px]  ${
+          isSelectOpen ? "text-primary-violet" : "text-secondary-headlines"
+        }`}
         htmlFor="Priority_id"
       >
         პრიორიტეტი*
@@ -48,7 +50,7 @@ export default function PriorityList({
           } text-[14px] w-[259px]  h-[45px] border ${
             showPriorityError ? "border-red-500" : "border-secondary-border"
           } ${
-            isSelectOpen ? "border-b-0 rounded-t-[5px]" : "rounded-[5px]"
+            isSelectOpen ? "border-b-0 rounded-t-[5px] " : "rounded-[5px]"
           }  flex items-center px-3 cursor-pointer justify-between relative`}
         >
           <div className="flex gap-2 items-center">

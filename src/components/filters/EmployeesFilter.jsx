@@ -40,14 +40,14 @@ const EmployeesFilter = forwardRef(({ open, setOpen, data }, ref) => {
                 onChange={() =>
                   setSelectedOption(`${item.name} ${item.surname}`)
                 }
-                className="peer hidden"
+                className="peer hidden t"
               />
               <div
-                className={`w-4 h-4 border-2 border-gray-300 rounded-sm flex items-center justify-center  `}
+                className={`w-4 h-4 border-2 border-primary-violet rounded-sm flex items-center justify-center  `}
               >
                 {selectedOption.includes(`${item.name} ${item.surname}`) && (
                   <Image
-                    src="/icons/check.svg"
+                    src="/icons/violet-check.svg"
                     alt="checked"
                     width={10}
                     height={8}

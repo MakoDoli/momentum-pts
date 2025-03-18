@@ -40,6 +40,7 @@ export default function CreateNewTask({ departments, priorities, statuses }) {
   const { createTask, isPending } = useCreateNewTask();
   const { errors, isSubmitting } = formState;
   const { employees } = useEmployees();
+
   const queryClient = useQueryClient();
   const router = useRouter();
   const [filteredEmployees, setFilteredEmployees] = useState([]);
@@ -49,6 +50,7 @@ export default function CreateNewTask({ departments, priorities, statuses }) {
     avatar: "",
   });
   const [priority, setPriority] = useState(priorities[1]);
+  const [status, setstatus] = useState(statuses[0]);
   const [showPriorityError, setShowPriorityError] = useState(false);
   const [showEmployeeError, setShowEmployeeError] = useState(false);
   const [isRestoring, setIsRestoring] = useState(true);

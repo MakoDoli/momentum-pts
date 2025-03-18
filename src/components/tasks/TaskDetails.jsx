@@ -1,4 +1,9 @@
-import { boldFont, slimFont, thinFont } from "@/app/fonts/fontWeigtht";
+import {
+  boldFont,
+  interFont,
+  slimFont,
+  thinFont,
+} from "@/app/fonts/fontWeigtht";
 import Image from "next/image";
 import React from "react";
 import StatusSelect from "./StatusSelect";
@@ -52,7 +57,7 @@ export default async function TaskDetails({ task }) {
         <div className="  mt-3">
           <div>
             <h1
-              className={`${boldFont.className} text-[34px] text-primary-headlines`}
+              className={`${interFont.className} font-semibold text-[34px] text-primary-headlines`}
             >
               {name}
             </h1>
