@@ -19,7 +19,6 @@ export default async function page() {
       <FilterContainer>
         <FilterMenu />
       </FilterContainer>
-
       <StatusTitles />
       <TasksContainer tasks={tasks} />
     </div>

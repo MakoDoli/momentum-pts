@@ -12,15 +12,18 @@ import {
 import CreateNewEmployee from "../employee/CreateNewEmployee";
 import { slimFont } from "@/app/fonts/fontWeigtht";
 
-export default function AddNewEmployee({ setIsModalOpen }) {
+export default function AddNewEmployee({ setIsModalOpen, isModalOpen }) {
   const [open, setOpen] = useState(false);
+  const handleClose = () => {
+    setOpen(!open);
+    setIsModalOpen(!isModalOpen);
+  };
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={() => handleClose()}>
       <DialogTrigger>
         <div
           className="flex  cursor-pointer  px-3 w-[550px] gap-2 h-[45px] items-center hover:bg-secondary-form"
           onClick={() => {
-            setIsModalOpen(true);
             setOpen(true);
           }}
         >

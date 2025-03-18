@@ -7,8 +7,7 @@ import { slimFont, thinFont } from "@/app/fonts/fontWeigtht";
 export default function EmployeeList({
   filteredEmployees,
   showEmployeeError,
-  isModalOpen,
-  setIsModalOpen,
+
   departments,
   employee,
   setEmployee,
@@ -17,23 +16,24 @@ export default function EmployeeList({
   const buttonRef = useRef(null);
   const contentRef = useRef(null);
   const [isSelectOpen, setIsSelectOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  console.log(isModalOpen);
+  useEffect(() => {
+    if (isModalOpen) return;
+    const handleClickOutside = (event) => {
+      if (
+        buttonRef.current &&
+        !buttonRef.current.contains(event.target) &&
+        contentRef.current &&
+        !contentRef.current.contains(event.target)
+      ) {
+        setIsSelectOpen(false);
+      }
+    };
 
-  //   useEffect(() => {
-  //     if (isModalOpen) return;
-  //     const handleClickOutside = (event) => {
-  //       if (
-  //         buttonRef.current &&
-  //         !buttonRef.current.contains(event.target) &&
-  //         contentRef.current &&
-  //         !contentRef.current.contains(event.target)
-  //       ) {
-  //         setIsSelectOpen(false);
-  //       }
-  //     };
-
-  //     document.addEventListener("mousedown", handleClickOutside);
-  //     return () => document.removeEventListener("mousedown", handleClickOutside);
-  //   }, []);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [isModalOpen]);
 
   return (
     <div className="flex flex-col gap-1 w-[550px] h-[64px] ">
@@ -77,10 +77,11 @@ export default function EmployeeList({
         </div>
         {isSelectOpen && (
           <div
-            className="w-[550px] border overflow-y-auto overflow-x-hidden h-[168px] absolute  border-secondary-border rounded-b-lg"
+            className="w-[550px] border overflow-y-auto overflow-x-hidden h-[185px] z-10 absolute bg-white border-secondary-border rounded-b-lg"
             ref={contentRef}
           >
             <AddNewEmployee
+              isModalOpen={isModalOpen}
               setIsModalOpen={() => setIsModalOpen((prev) => !prev)}
               departments={departments}
             />

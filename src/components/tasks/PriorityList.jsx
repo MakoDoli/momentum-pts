@@ -8,30 +8,27 @@ export default function PriorityList({
   setPriority,
   showPriorityError,
   priority,
-  isModalOpen,
-  setIsModalOpen,
   priorities,
 }) {
   const buttonRef = useRef(null);
   const contentRef = useRef(null);
   const [isSelectOpen, setIsSelectOpen] = useState(false);
 
-  //   useEffect(() => {
-  //     if (isModalOpen) return;
-  //     const handleClickOutside = (event) => {
-  //       if (
-  //         buttonRef.current &&
-  //         !buttonRef.current.contains(event.target) &&
-  //         contentRef.current &&
-  //         !contentRef.current.contains(event.target)
-  //       ) {
-  //         setIsSelectOpen(false);
-  //       }
-  //     };
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        buttonRef.current &&
+        !buttonRef.current.contains(event.target) &&
+        contentRef.current &&
+        !contentRef.current.contains(event.target)
+      ) {
+        setIsSelectOpen(false);
+      }
+    };
 
-  //     document.addEventListener("mousedown", handleClickOutside);
-  //     return () => document.removeEventListener("mousedown", handleClickOutside);
-  //   }, []);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   return (
     <div className="flex flex-col gap-1 w-[259px] h-[64px] ">

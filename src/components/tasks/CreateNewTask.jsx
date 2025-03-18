@@ -54,7 +54,6 @@ export default function CreateNewTask({ departments, priorities, statuses }) {
   const [isRestoring, setIsRestoring] = useState(true);
   const [isInitialState, setIsInitialState] = useState(true);
   const [employeesList, setEmployeesList] = useState([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     setEmployeesList(employees);
@@ -400,8 +399,8 @@ export default function CreateNewTask({ departments, priorities, statuses }) {
               {changedDepartment && changedDepartment !== "" && (
                 <EmployeeList
                   filteredEmployees={filteredEmployees}
-                  isModalOpen={isModalOpen}
-                  setIsModalOpen={setIsModalOpen}
+                  // isModalOpen={isModalOpen}
+                  // setIsModalOpen={setIsModalOpen}
                   showEmployeeError={showEmployeeError}
                   employee={employee}
                   setEmployee={setEmployee}
