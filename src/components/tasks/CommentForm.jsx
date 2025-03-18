@@ -4,16 +4,19 @@ import { useForm } from "react-hook-form";
 import { slimFont, thinFont } from "@/app/fonts/fontWeigtht";
 import useAddComment from "@/hooks/useAddComment";
 import { useQueryClient } from "@tanstack/react-query";
+import MinisSpinner from "../ui/MiniSpinner";
 
-export default function CommentForm({ parentId, taskId }) {
-  const { handleSubmit, formState, register } = useForm();
+export default function CommentForm({ parentId, taskId, setShowForm }) {
+  const { handleSubmit, formState, register, reset } = useForm();
   const { errors, isSubmitting } = formState;
-  const { addNewComment } = useAddComment();
-
+  const { addNewComment, isPending } = useAddComment();
+  const queryClient = useQueryClient();
   const submitFunction = (data) => {
-    const queryClient = useQueryClient();
     if (data.text.trim() === "") return;
-
+    setTimeout(() => {
+      reset();
+      if (setShowForm !== null) setShowForm(false);
+    }, 0);
     addNewComment(
       {
         payload: { text: data.text, parent_id: parentId },
@@ -21,7 +24,10 @@ export default function CommentForm({ parentId, taskId }) {
       },
       {
         onSuccess: () => {
-          queryClient.invalidateQueries({ queryKey: ["comments"] });
+          queryClient.invalidateQueries({ queryKey: ["comments", taskId] });
+          reset();
+          if (setShowForm !== null) setShowForm(false);
+          console.log("JOB DONE< CLOSING!");
         },
       }
     );
@@ -49,7 +55,7 @@ export default function CommentForm({ parentId, taskId }) {
         className={`${slimFont.className} text-[16px] text-white bg-primary-violet px-[18px] py-2 rounded-[20px] ml-[456px] mb-[15px] `}
         disabled={isSubmitting}
       >
-        დააკომენტარე
+        {isPending ? <MinisSpinner /> : "დააკომენტარე"}
       </button>
     </form>
   );

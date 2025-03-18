@@ -1,9 +1,22 @@
+"use client";
 import React from "react";
 
 import CommentCard from "./CommentCard";
 import { getCommentsById } from "@/service/data-service";
-export default async function CommentsContainer({ taskId }) {
-  const comments = await getCommentsById(taskId);
+import { useQuery } from "@tanstack/react-query";
+import MinisSpinner from "../ui/MiniSpinner";
+export default function CommentsContainer({ taskId }) {
+  const {
+    data: comments,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["comments", taskId],
+    queryFn: () => getCommentsById(Number(taskId)),
+  });
+  if (isLoading) return <MinisSpinner />;
+  if (error) return <div>Error: {error.message}</div>;
+
   const commentsLength =
     comments.reduce((acc, comment) => acc + comment.sub_comments.length, 0) +
     comments.length;

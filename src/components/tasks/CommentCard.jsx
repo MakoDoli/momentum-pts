@@ -33,7 +33,16 @@ export default function CommentCard({ comment, taskId }) {
               {showForm ? "დახურვა" : "უპასუხე"}
             </p>
           </div>
-          {showForm && <CommentForm parentId={comment.id} taskId={taskId} />}
+
+          {showForm && (
+            <div className="-ml-12">
+              <CommentForm
+                parentId={comment.id}
+                taskId={taskId}
+                setShowForm={setShowForm}
+              />
+            </div>
+          )}
           {comment.sub_comments?.map((sub) => (
             <Reply key={sub.id} comment={sub} />
           ))}
