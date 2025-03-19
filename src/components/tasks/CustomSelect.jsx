@@ -7,30 +7,10 @@ import { revalidatePath } from "next/cache";
 import React, { useEffect, useRef, useState } from "react";
 import { FaAngleDown, FaAngleUp } from "react-icons/fa";
 
-export default function CustomSelect({ statuses, status, taskId }) {
-  const { changeStatus } = useUpdateStatus();
+export default function CustomSelect({ statuses, setStatus, status }) {
   const buttonRef = useRef(null);
   const contentRef = useRef(null);
   const [isSelectOpen, setIsSelectOpen] = useState(false);
-  const [updatedStatus, setUpdatedStatus] = useState(status);
-  const queryClient = useQueryClient();
-
-  const updateStatus = (statusId) => {
-    setUpdatedStatus(statuses.filter((st) => st.id === statusId)[0].name);
-    changeStatus(
-      { payload: { status_id: statusId }, taskId },
-      {
-        onSuccess: () => {
-          queryClient.invalidateQueries(["tasks"], {
-            refetchInactive: true,
-          });
-          revalidatePath("/");
-          revalidatePath(`/${taskId}/task-details`);
-        },
-      }
-    );
-    setIsSelectOpen(false);
-  };
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -50,20 +30,30 @@ export default function CustomSelect({ statuses, status, taskId }) {
 
   return (
     <div className="flex flex-col gap-1 w-[259px]  ">
+      <label
+        className={`${slimFont.className} text-[16px]  ${
+          isSelectOpen ? "text-primary-violet" : "text-secondary-headlines"
+        }`}
+        htmlFor="Priority_id"
+      >
+        სტატუსი*
+      </label>
       <div className={`${slimFont.className} relative text-[14px] `}>
         <div
           ref={buttonRef}
           onClick={() => setIsSelectOpen((prev) => !prev)}
           className={`${
             slimFont.className
-          } text-[14px] w-[259px]  h-[45px] border border-gray-400
+          } text-[14px] w-[259px]  h-[45px] border 
           } ${
-            isSelectOpen ? "border-b-0 rounded-t-[5px]" : "rounded-[5px]"
+            isSelectOpen
+              ? " border-primary-violet border-b-0 rounded-t-[5px] "
+              : "rounded-[5px] border-secondary-border"
           }  flex items-center px-3 cursor-pointer justify-between relative`}
         >
           <div className="flex gap-2 items-center">
             <p className={`${thinFont.className} text-primary-headlines`}>
-              {updatedStatus}
+              {status.name}
             </p>
           </div>
 
@@ -71,7 +61,7 @@ export default function CustomSelect({ statuses, status, taskId }) {
         </div>
         {isSelectOpen && (
           <div
-            className="w-[259px] border overflow-y-auto overflow-x-hidden  absolute  border-gray-400 rounded-b-lg bg-white"
+            className={`w-[259px] border overflow-y-auto overflow-x-hidden  absolute $ border-primary-violet rounded-b-lg border-t-0 bg-white`}
             ref={contentRef}
           >
             {statuses?.map((st) => (
@@ -79,10 +69,17 @@ export default function CustomSelect({ statuses, status, taskId }) {
                 key={st.id}
                 className={`flex  px-3 gap-2 h-[42px]   hover:bg-gray-100 items-center`}
                 onClick={() => {
-                  updateStatus(st.id);
+                  setIsSelectOpen(false);
+                  setStatus({ name: st.name, id: st.id });
+                  localStorage.setItem(
+                    "status",
+                    JSON.stringify({ name: st.name, id: st.id })
+                  );
                 }}
               >
-                <p>{st.name}</p>
+                <p className={`${thinFont.className} text-primary-blackish`}>
+                  {st.name}
+                </p>
               </div>
             ))}
           </div>

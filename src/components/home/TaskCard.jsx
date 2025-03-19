@@ -94,7 +94,13 @@ export default function TaskCard({ task, statusName }) {
           {formattedDate}
         </div>
       </div>
-      <p className="text-[15px] text-primary-headlines mb-3">{name}</p>
+      <p className="text-[15px] text-primary-headlines mb-3">
+        {name && name?.length < 35
+          ? name
+          : name && name?.length >= 35
+          ? name?.substring(0, 35) + "..."
+          : ""}
+      </p>
       <p
         className={`${slimFont.className} h-[34px] text-sm text-secondary-headlines mb-[28px]`}
       >

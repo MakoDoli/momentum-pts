@@ -7,7 +7,7 @@ import { Controller, useForm } from "react-hook-form";
 import { useEmployees } from "@/hooks/useEmployees";
 import { useCreateNewTask } from "@/hooks/useCreateNewTask";
 import { useRouter } from "next/navigation";
-import { useQueryClient } from "@tanstack/react-query";
+import { dataTagErrorSymbol, useQueryClient } from "@tanstack/react-query";
 import { FaAngleDown } from "react-icons/fa";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -17,8 +17,10 @@ import MiniSpinner from "@/components/ui/MiniSpinner";
 
 import EmployeeList from "./EmployeeList";
 import PriorityList from "./PriorityList";
-import { addDays, format, parse } from "date-fns";
+import { addDays, format } from "date-fns";
 import { revalidatePath } from "next/cache";
+
+import CustomSelect from "./CustomSelect";
 
 export default function CreateNewTask({ departments, priorities, statuses }) {
   const {
@@ -34,7 +36,7 @@ export default function CreateNewTask({ departments, priorities, statuses }) {
     mode: "onChange",
     defaultValues: {
       description: "",
-      status_id: 1,
+      due_date: format(addDays(new Date(), 1), "yyyy-MM-dd"),
     },
   });
   const { createTask, isPending } = useCreateNewTask();
@@ -50,8 +52,7 @@ export default function CreateNewTask({ departments, priorities, statuses }) {
     avatar: "",
   });
   const [priority, setPriority] = useState(priorities[1]);
-  const [status, setstatus] = useState(statuses[0]);
-  const [showPriorityError, setShowPriorityError] = useState(false);
+  const [status, setStatus] = useState(statuses[0]);
   const [showEmployeeError, setShowEmployeeError] = useState(false);
   const [isRestoring, setIsRestoring] = useState(true);
   const [isInitialState, setIsInitialState] = useState(true);
@@ -64,11 +65,13 @@ export default function CreateNewTask({ departments, priorities, statuses }) {
   const changedDepartment = watch("department_id");
   useEffect(() => {
     const storedPriority = JSON.parse(localStorage.getItem("priority"));
+    const storedStatus = JSON.parse(localStorage.getItem("status"));
     if (changedDepartment === undefined) {
       const storedEmployee = JSON.parse(localStorage.getItem("employee"));
 
       if (storedEmployee) setEmployee(storedEmployee);
       if (storedPriority) setPriority(storedPriority);
+      if (storedStatus) setStatus(storedStatus);
     }
     setTimeout(() => setIsRestoring(false), 5000);
   }, [changedDepartment]);
@@ -112,6 +115,7 @@ export default function CreateNewTask({ departments, priorities, statuses }) {
     if (savedData) {
       const parsedData = JSON.parse(savedData);
       reset(parsedData);
+      console.log(parsedData);
     }
   }, [reset, setValue, trigger]);
 
@@ -133,16 +137,19 @@ export default function CreateNewTask({ departments, priorities, statuses }) {
       setShowPriorityError(true);
       return;
     }
+    console.log("RAWWW  " + data.due_date);
     const formattedDate = data.due_date
       ? format(new Date(data.due_date), "yyyy-MM-dd")
-      : null;
+      : format(addDays(new Date(), 1), "yyyy-MM-dd");
+    console.log("FORMATTEDDDD  " + formattedDate);
+    console.log("STATUS IDDD " + status.id);
     const formData = new FormData();
 
     formData.append("name", data.name);
     formData.append("description", data.description);
     formData.append("employee_id", employee.id);
     formData.append("priority_id", priority.id);
-    formData.append("status_id", data.status_id);
+    formData.append("status_id", status.id);
     formData.append("due_date", formattedDate);
 
     createTask(formData, {
@@ -153,6 +160,7 @@ export default function CreateNewTask({ departments, priorities, statuses }) {
         localStorage.removeItem("TaskData");
         localStorage.removeItem("employee");
         localStorage.removeItem("priority");
+        localStorage.removeItem("status");
 
         router.push("/");
         revalidatePath("/");
@@ -400,8 +408,6 @@ export default function CreateNewTask({ departments, priorities, statuses }) {
               {changedDepartment && changedDepartment !== "" && (
                 <EmployeeList
                   filteredEmployees={filteredEmployees}
-                  // isModalOpen={isModalOpen}
-                  // setIsModalOpen={setIsModalOpen}
                   showEmployeeError={showEmployeeError}
                   employee={employee}
                   setEmployee={setEmployee}
@@ -416,53 +422,13 @@ export default function CreateNewTask({ departments, priorities, statuses }) {
               <PriorityList
                 priorities={priorities}
                 priority={priority}
-                setShowPriorityError={setShowPriorityError}
-                showPriorityError={showPriorityError}
                 setPriority={setPriority}
               />
-
-              <div className="flex relative flex-col gap-1 w-[259px] h-[64px]">
-                <label
-                  htmlFor="status_id"
-                  className={`${slimFont.className} text-[16px] text-secondary-headlines`}
-                >
-                  სტატუსი*{" "}
-                </label>
-                <Controller
-                  name="status_id"
-                  control={control}
-                  render={({ field }) => (
-                    <>
-                      <select
-                        {...field}
-                        className={`${
-                          slimFont.className
-                        } outline-none appearance-none border border-1  ${
-                          errors.status_id
-                            ? "border-red-500"
-                            : "border-secondary-border"
-                        } rounded-[5px] p-3 relative  text-[14px] h-[45px] `}
-                        {...register("status_id")}
-                        value={field.value ?? 1}
-                        id="department_id"
-                      >
-                        {statuses?.map((status) => (
-                          <option
-                            key={status.id}
-                            className={`${thinFont.className} text-xs text-primary-blackish `}
-                            value={status.id}
-                          >
-                            {status.name}
-                          </option>
-                        ))}
-                      </select>
-                      <span className="absolute right-3 top-2/3 transform pointer-events-none ">
-                        <FaAngleDown className="w-[14px] h-[14px]"></FaAngleDown>
-                      </span>
-                    </>
-                  )}
-                />
-              </div>
+              <CustomSelect
+                statuses={statuses}
+                status={status}
+                setStatus={setStatus}
+              />
             </div>
             <div className="flex flex-col relative gap-1 w-[318px] ml-[161px] h-[64px]">
               <label
@@ -479,7 +445,7 @@ export default function CreateNewTask({ departments, priorities, statuses }) {
               <Controller
                 control={control}
                 name="due_date"
-                rules={{ required: "აირჩიეთ თარიღი" }}
+                //rules={{ required: "აირჩიეთ თარიღი" }}
                 render={({ field }) => (
                   <DatePicker
                     {...field}
@@ -528,6 +494,7 @@ export default function CreateNewTask({ departments, priorities, statuses }) {
               localStorage.removeItem("TaskData");
               localStorage.removeItem("employee");
               localStorage.removeItem("priority");
+              localStorage.removeItem("status");
               router.push("/");
             }}
           >

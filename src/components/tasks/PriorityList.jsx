@@ -4,12 +4,7 @@ import { FaAngleDown, FaAngleUp } from "react-icons/fa";
 // Assuming this component exists as in your original code
 import { slimFont, thinFont } from "@/app/fonts/fontWeigtht";
 
-export default function PriorityList({
-  setPriority,
-  showPriorityError,
-  priority,
-  priorities,
-}) {
+export default function PriorityList({ setPriority, priority, priorities }) {
   const buttonRef = useRef(null);
   const contentRef = useRef(null);
   const [isSelectOpen, setIsSelectOpen] = useState(false);
@@ -47,10 +42,11 @@ export default function PriorityList({
           onClick={() => setIsSelectOpen((prev) => !prev)}
           className={`${
             slimFont.className
-          } text-[14px] w-[259px]  h-[45px] border ${
-            showPriorityError ? "border-red-500" : "border-secondary-border"
+          } text-[14px] w-[259px]  h-[45px] border  
           } ${
-            isSelectOpen ? "border-b-0 rounded-t-[5px] " : "rounded-[5px]"
+            isSelectOpen
+              ? "border-b-0 rounded-t-[5px] border-primary-violet "
+              : "rounded-[5px] border-secondary-border"
           }  flex items-center px-3 cursor-pointer justify-between relative`}
         >
           <div className="flex gap-2 items-center">
@@ -72,7 +68,7 @@ export default function PriorityList({
         </div>
         {isSelectOpen && (
           <div
-            className="w-[259px] border overflow-y-auto overflow-x-hidden  absolute  border-secondary-border rounded-b-lg"
+            className="w-[259px] border overflow-y-auto overflow-x-hidden  absolute  border-primary-violet rounded-b-lg border-t-0"
             ref={contentRef}
           >
             {priorities?.reverse()?.map((pr) => (
