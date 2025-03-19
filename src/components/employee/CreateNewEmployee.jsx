@@ -12,6 +12,7 @@ export default function CreateNewEmployee({
   setOpen,
   departments,
   setIsModalOpen,
+  setIsSelectOpen,
 }) {
   const onClose = () => {
     setOpen();
@@ -63,6 +64,7 @@ export default function CreateNewEmployee({
 
     setTimeout(() => {
       setOpen();
+      setIsSelectOpen(false);
     }, 1000);
     addNewEmployee(formData);
   };
@@ -192,8 +194,8 @@ export default function CreateNewEmployee({
                 message: "მაქსიმუმ 255 სიმბოლო",
               },
               pattern: {
-                value: /^[ა-ჰa-zA-Z]+$/i, // Only Georgian and English letters
-                message: "მხოლოდ ასოებია ნებადართული", // Custom error message
+                value: /^[ა-ჰa-zA-Z]+$/i,
+                message: "მხოლოდ ასოებია ნებადართული",
               },
               onChange: () =>
                 setIsInitialState({ ...isInitialState, surname: false }),

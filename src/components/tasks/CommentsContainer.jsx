@@ -29,7 +29,7 @@ export default function CommentsContainer({ taskId }) {
           {commentsLength}
         </div>
       </div>
-      <div>
+      <div className="space-y-9">
         {comments?.map((comment) => (
           <CommentCard key={comment.id} comment={comment} taskId={taskId} />
         ))}

@@ -27,7 +27,6 @@ export default function CommentForm({ parentId, taskId, setShowForm }) {
           queryClient.invalidateQueries({ queryKey: ["comments", taskId] });
           reset();
           if (setShowForm !== null) setShowForm(false);
-          console.log("JOB DONE< CLOSING!");
         },
       }
     );

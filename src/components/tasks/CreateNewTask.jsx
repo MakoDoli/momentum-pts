@@ -115,7 +115,6 @@ export default function CreateNewTask({ departments, priorities, statuses }) {
     if (savedData) {
       const parsedData = JSON.parse(savedData);
       reset(parsedData);
-      console.log(parsedData);
     }
   }, [reset, setValue, trigger]);
 
@@ -137,12 +136,11 @@ export default function CreateNewTask({ departments, priorities, statuses }) {
       setShowPriorityError(true);
       return;
     }
-    console.log("RAWWW  " + data.due_date);
+
     const formattedDate = data.due_date
       ? format(new Date(data.due_date), "yyyy-MM-dd")
       : format(addDays(new Date(), 1), "yyyy-MM-dd");
-    console.log("FORMATTEDDDD  " + formattedDate);
-    console.log("STATUS IDDD " + status.id);
+
     const formData = new FormData();
 
     formData.append("name", data.name);
@@ -445,7 +443,6 @@ export default function CreateNewTask({ departments, priorities, statuses }) {
               <Controller
                 control={control}
                 name="due_date"
-                //rules={{ required: "აირჩიეთ თარიღი" }}
                 render={({ field }) => (
                   <DatePicker
                     {...field}

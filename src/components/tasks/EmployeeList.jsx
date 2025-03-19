@@ -7,7 +7,6 @@ import { slimFont, thinFont } from "@/app/fonts/fontWeigtht";
 export default function EmployeeList({
   filteredEmployees,
   showEmployeeError,
-
   departments,
   employee,
   setEmployee,
@@ -84,6 +83,7 @@ export default function EmployeeList({
               isModalOpen={isModalOpen}
               setIsModalOpen={() => setIsModalOpen((prev) => !prev)}
               departments={departments}
+              setIsSelectOpen={setIsSelectOpen}
             />
             {filteredEmployees?.reverse()?.map((emp) => (
               <div

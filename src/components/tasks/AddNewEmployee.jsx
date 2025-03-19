@@ -12,7 +12,12 @@ import {
 import CreateNewEmployee from "../employee/CreateNewEmployee";
 import { slimFont } from "@/app/fonts/fontWeigtht";
 
-export default function AddNewEmployee({ setIsModalOpen, isModalOpen }) {
+export default function AddNewEmployee({
+  setIsModalOpen,
+  isModalOpen,
+  setIsSelectOpen,
+  departments,
+}) {
   const [open, setOpen] = useState(false);
   const handleClose = () => {
     setOpen(!open);
@@ -50,6 +55,8 @@ export default function AddNewEmployee({ setIsModalOpen, isModalOpen }) {
               <CreateNewEmployee
                 setOpen={() => setOpen(false)}
                 setIsModalOpen={() => setIsModalOpen(false)}
+                setIsSelectOpen={setIsSelectOpen}
+                departments={departments}
               />
             </section>
           </DialogDescription>
