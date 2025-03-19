@@ -1,4 +1,5 @@
 "use client";
+import { slimFont } from "@/app/fonts/fontWeigtht";
 import React, { useState, useEffect, useRef } from "react";
 import { FaAngleDown, FaAngleUp } from "react-icons/fa";
 
@@ -38,7 +39,9 @@ function MenuButton({ PassedComponent, buttonText, data }) {
           onClick={toggleDropdown}
           className={`${
             isOpen ? "text-primary-violet" : "text-primary-blackish"
-          } flex h-[35px]  gap-1 items-center text=[16px]  px-4 py-2 rounded`}
+          } flex h-[35px]  gap-1 items-center text=[16px]  px-4 py-2 rounded ${
+            slimFont.className
+          }`}
         >
           <span>{buttonText}</span>
           <span>{isOpen ? <FaAngleUp /> : <FaAngleDown />}</span>

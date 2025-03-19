@@ -14,7 +14,6 @@ const EmployeesFilter = forwardRef(({ open, setOpen, data }, ref) => {
     const updatedFilters = [...filters].filter(
       (filter) => filter.type !== "employee"
     );
-    console.log("filters in employee" + updatedFilters);
 
     updatedFilters.push({ type: "employee", value: selectedOption });
 

@@ -10,13 +10,24 @@ export function formatDate(dateString) {
 }
 
 export const filterTasks = (filters, tasks) => {
+  const departmentArr = filters
+    .filter((f) => f.type === "department")
+    .map((f) => f.value);
+  const priorityArr = filters
+    .filter((f) => f.type === "priority")
+    .map((f) => f.value);
+  const employeeArr = filters.find((f) => f.type === "employee");
+
   return tasks.filter((task) => {
-    return filters.every((filter) => {
-      const taskValue = task[filter.type];
-      if (filter.type === "employee") {
-        return filter.value === `${taskValue.name} ${taskValue.surname}`;
-      }
-      return taskValue.name === filter.value;
-    });
+    const departmentFiltered =
+      departmentArr.length === 0 ||
+      departmentArr.includes(task.department.name);
+    const priorityFiltered =
+      priorityArr.length === 0 || priorityArr.includes(task.priority.name);
+    const employeeFiltered =
+      !employeeArr ||
+      `${task.employee.name} ${task.employee.surname}` === employeeArr.value;
+
+    return departmentFiltered && priorityFiltered && employeeFiltered;
   });
 };
