@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { FaAngleDown, FaAngleUp } from "react-icons/fa";
-// Assuming this component exists as in your original code
 import { slimFont, thinFont } from "@/app/fonts/fontWeigtht";
 
 export default function PriorityList({ setPriority, priority, priorities }) {

@@ -464,25 +464,9 @@ export default function CreateNewTask({ departments, priorities, statuses }) {
                   />
                 )}
               />
-              {errors.due_date && (
-                <p
-                  className={`${slimFont.className} text-red-500 text-xs flex items-center gap-2`}
-                >
-                  <span>
-                    <Image
-                      src="/icons/red-check.png"
-                      width={10}
-                      height={8}
-                      alt="check"
-                    />
-                  </span>
-                  {errors.due_date?.message}
-                </p>
-              )}
             </div>
           </div>
         </div>
-
         <div className="flex gap-[31px] mb-[87px]  h-[47px] justify-end w-full mt-[147px]">
           <button
             type="button"

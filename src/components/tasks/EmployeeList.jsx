@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { FaAngleDown, FaAngleUp } from "react-icons/fa";
-import AddNewEmployee from "./AddNewEmployee"; // Assuming this component exists as in your original code
+import AddNewEmployee from "./AddNewEmployee";
 import { slimFont, thinFont } from "@/app/fonts/fontWeigtht";
 
 export default function EmployeeList({
