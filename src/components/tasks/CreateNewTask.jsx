@@ -1,25 +1,22 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
-
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useEmployees } from "@/hooks/useEmployees";
 import { useCreateNewTask } from "@/hooks/useCreateNewTask";
 import { useRouter } from "next/navigation";
-import { dataTagErrorSymbol, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { FaAngleDown } from "react-icons/fa";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-
 import { slimFont, thinFont } from "@/app/fonts/fontWeigtht";
 import MiniSpinner from "@/components/ui/MiniSpinner";
-
 import EmployeeList from "./EmployeeList";
 import PriorityList from "./PriorityList";
 import { addDays, format } from "date-fns";
 import { revalidatePath } from "next/cache";
-
+import { ka } from "date-fns/locale/ka";
 import CustomSelect from "./CustomSelect";
 
 export default function CreateNewTask({ departments, priorities, statuses }) {
@@ -441,6 +438,7 @@ export default function CreateNewTask({ departments, priorities, statuses }) {
                 className="absolute top-11 left-4 z-10 "
               />
               <Controller
+                id="date"
                 control={control}
                 name="due_date"
                 render={({ field }) => (
@@ -453,6 +451,7 @@ export default function CreateNewTask({ departments, priorities, statuses }) {
                     }
                     onChange={(date) => field.onChange(date)}
                     dateFormat="dd/MM/yyyy"
+                    locale={ka}
                     placeholderText="DD/MM/YYYY"
                     calendarClassName="custom-calendar"
                     minDate={new Date()}
