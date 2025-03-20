@@ -7,7 +7,6 @@ import { useEmployees } from "@/hooks/useEmployees";
 import { useCreateNewTask } from "@/hooks/useCreateNewTask";
 import { useRouter } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
-import { FaAngleDown } from "react-icons/fa";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { slimFont, thinFont } from "@/app/fonts/fontWeigtht";
@@ -18,6 +17,7 @@ import { addDays, format } from "date-fns";
 import { revalidatePath } from "next/cache";
 import { ka } from "date-fns/locale/ka";
 import CustomSelect from "./CustomSelect";
+import DepartmentSelect from "./DepartmentSelect";
 
 export default function CreateNewTask({ departments, priorities, statuses }) {
   const {
@@ -37,7 +37,7 @@ export default function CreateNewTask({ departments, priorities, statuses }) {
     },
   });
   const { createTask, isPending } = useCreateNewTask();
-  const { errors, isSubmitting } = formState;
+  const { errors } = formState;
   const { employees } = useEmployees();
 
   const queryClient = useQueryClient();
@@ -50,7 +50,9 @@ export default function CreateNewTask({ departments, priorities, statuses }) {
   });
   const [priority, setPriority] = useState(priorities[1]);
   const [status, setStatus] = useState(statuses[0]);
+  const [department, setDepartment] = useState({});
   const [showEmployeeError, setShowEmployeeError] = useState(false);
+  const [showDepartmentError, setShowDepartmentError] = useState(false);
   const [isRestoring, setIsRestoring] = useState(true);
   const [isInitialState, setIsInitialState] = useState(true);
   const [employeesList, setEmployeesList] = useState([]);
@@ -59,30 +61,31 @@ export default function CreateNewTask({ departments, priorities, statuses }) {
     setEmployeesList(employees);
   }, [employees]);
 
-  const changedDepartment = watch("department_id");
   useEffect(() => {
     const storedPriority = JSON.parse(localStorage.getItem("priority"));
     const storedStatus = JSON.parse(localStorage.getItem("status"));
-    if (changedDepartment === undefined) {
-      const storedEmployee = JSON.parse(localStorage.getItem("employee"));
+    const storedDepartment = JSON.parse(localStorage.getItem("department"));
 
-      if (storedEmployee) setEmployee(storedEmployee);
-      if (storedPriority) setPriority(storedPriority);
-      if (storedStatus) setStatus(storedStatus);
-    }
+    const storedEmployee = JSON.parse(localStorage.getItem("employee"));
+
+    if (storedEmployee) setEmployee(storedEmployee);
+    if (storedPriority) setPriority(storedPriority);
+    if (storedStatus) setStatus(storedStatus);
+    if (storedDepartment) setDepartment(storedDepartment);
+
     setTimeout(() => setIsRestoring(false), 5000);
-  }, [changedDepartment]);
+  }, []);
 
   useEffect(() => {
-    const storedData = JSON.parse(localStorage.getItem("TaskData"));
-    if (storedData) {
+    const storedDepartment = JSON.parse(localStorage.getItem("department"));
+    if (storedDepartment) {
       setFilteredEmployees(
         employeesList?.filter(
-          (emp) => emp.department.id === parseInt(storedData.department_id)
+          (emp) => emp.department.id === storedDepartment.id
         )
       );
     }
-    if (!isRestoring && changedDepartment !== undefined) {
+    if (!isRestoring && department !== undefined) {
       setEmployee({
         ...employee,
         id: "",
@@ -91,10 +94,10 @@ export default function CreateNewTask({ departments, priorities, statuses }) {
       });
       localStorage.removeItem("employee");
     }
-    if (!storedData && changedDepartment) {
+    if (!storedDepartment && department) {
       setFilteredEmployees(
         employeesList?.filter(
-          (emp) => emp.department.id === parseInt(changedDepartment)
+          (emp) => emp.department.id === parseInt(department.id)
         )
       );
       setEmployee({
@@ -105,7 +108,7 @@ export default function CreateNewTask({ departments, priorities, statuses }) {
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [changedDepartment, reset, employeesList]);
+  }, [department, reset, employeesList]);
 
   useEffect(() => {
     const savedData = localStorage.getItem("TaskData");
@@ -125,12 +128,12 @@ export default function CreateNewTask({ departments, priorities, statuses }) {
 
   const submitFunction = (data) => {
     setIsInitialState(false);
-    if (employee.name === "თანამშრომლების სია") {
-      setShowEmployeeError(true);
+    if (!department.name) {
+      setShowDepartmentError(true);
       return;
     }
-    if (!priority?.id) {
-      setShowPriorityError(true);
+    if (employee.name === "თანამშრომლების სია") {
+      setShowEmployeeError(true);
       return;
     }
 
@@ -156,6 +159,7 @@ export default function CreateNewTask({ departments, priorities, statuses }) {
         localStorage.removeItem("employee");
         localStorage.removeItem("priority");
         localStorage.removeItem("status");
+        localStorage.removeItem("department");
 
         router.push("/");
         revalidatePath("/");
@@ -269,64 +273,14 @@ export default function CreateNewTask({ departments, priorities, statuses }) {
               </div>
             </div>
             <div className="flex flex-col gap-[49px]">
-              <div>
-                <div className="flex relative flex-col gap-1 w-[550px] h-[64px]">
-                  <label
-                    htmlFor="department_id"
-                    className={`${slimFont.className} text-[16px] text-secondary-headlines`}
-                  >
-                    დეპარტამენტი*{" "}
-                  </label>
-                  <Controller
-                    name="department_id"
-                    control={control}
-                    rules={{ required: "აირჩიეთ დეპარტამენტი" }}
-                    render={({ field }) => (
-                      <>
-                        <select
-                          {...field}
-                          className={`${
-                            thinFont.className
-                          } outline-none appearance-none border border-1  ${
-                            errors.department_id
-                              ? "border-red-500"
-                              : "border-secondary-border"
-                          } rounded-[5px] p-3 relative text-primary-blackish text-[14px] h-[45px] `}
-                          id="department_id"
-                        >
-                          <option value=""></option>
-                          {departments?.map((department) => (
-                            <option
-                              key={department.id}
-                              className={`${thinFont.className} text-xs text-primary-blackish  `}
-                              value={department.id}
-                            >
-                              {department.name}
-                            </option>
-                          ))}
-                        </select>
-                        <span className="absolute right-3 top-2/3 transform pointer-events-none ">
-                          <FaAngleDown className="w-[14px] h-[14px]"></FaAngleDown>
-                        </span>
-                      </>
-                    )}
-                  />
-                  {errors.department_id && (
-                    <p
-                      className={`${slimFont.className} text-red-500 text-xs flex items-center gap-2`}
-                    >
-                      <span>
-                        <Image
-                          src="/icons/red-check.png"
-                          width={10}
-                          height={8}
-                          alt="check"
-                        />
-                      </span>
-                      {errors.department_id?.message}
-                    </p>
-                  )}
-                </div>
+              <div className="flex relative flex-col gap-1 w-[550px] h-[64px]">
+                <DepartmentSelect
+                  departments={departments}
+                  department={department}
+                  setDepartment={setDepartment}
+                  showDepartmentError={showDepartmentError}
+                  setShowDepartmentError={setShowDepartmentError}
+                />
               </div>
             </div>
           </div>
@@ -400,7 +354,7 @@ export default function CreateNewTask({ departments, priorities, statuses }) {
               </div>
             </div>
             <div className="flex flex-col ">
-              {changedDepartment && changedDepartment !== "" && (
+              {department && department !== "" && (
                 <EmployeeList
                   filteredEmployees={filteredEmployees}
                   showEmployeeError={showEmployeeError}
@@ -438,12 +392,12 @@ export default function CreateNewTask({ departments, priorities, statuses }) {
                 className="absolute top-11 left-4 z-10 "
               />
               <Controller
-                id="date"
                 control={control}
                 name="due_date"
                 render={({ field }) => (
                   <DatePicker
                     {...field}
+                    id="date"
                     selected={
                       field.value
                         ? new Date(field.value)
@@ -475,6 +429,7 @@ export default function CreateNewTask({ departments, priorities, statuses }) {
               localStorage.removeItem("employee");
               localStorage.removeItem("priority");
               localStorage.removeItem("status");
+              localStorage.removeItem("department");
               router.push("/");
             }}
           >
@@ -483,7 +438,7 @@ export default function CreateNewTask({ departments, priorities, statuses }) {
 
           <button
             className=" p-3 w-[187px] h-[47px] text-[16px] text-white bg-primary-violet hover:bg-secondary-violet hover-smooth rounded-[5px] "
-            disabled={isSubmitting}
+            disabled={isPending}
             onClick={() => setIsInitialState(false)}
           >
             {isPending ? <MiniSpinner /> : "დავალების შექმნა"}

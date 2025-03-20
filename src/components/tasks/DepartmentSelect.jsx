@@ -3,7 +3,13 @@ import { slimFont, thinFont } from "@/app/fonts/fontWeigtht";
 import React, { useEffect, useRef, useState } from "react";
 import { FaAngleDown, FaAngleUp } from "react-icons/fa";
 
-export default function CustomSelect({ statuses, setStatus, status }) {
+export default function DepartmentSelect({
+  departments,
+  setDepartment,
+  department,
+  showDepartmentError,
+  setShowDepartmentError,
+}) {
   const buttonRef = useRef(null);
   const contentRef = useRef(null);
   const [isSelectOpen, setIsSelectOpen] = useState(false);
@@ -25,32 +31,34 @@ export default function CustomSelect({ statuses, setStatus, status }) {
   }, []);
 
   return (
-    <div className="flex flex-col gap-1 w-[259px]  ">
+    <div className="flex flex-col gap-1 w-[550px]  ">
       <label
         className={`${slimFont.className} text-[16px]  ${
           isSelectOpen ? "text-primary-violet" : "text-secondary-headlines"
         }`}
-        htmlFor="status"
+        htmlFor="department"
       >
-        სტატუსი*
+        დეპარტამენტი*
       </label>
       <div className={`${slimFont.className} relative text-[14px] `}>
         <div
-          id="status"
+          id="department"
           ref={buttonRef}
           onClick={() => setIsSelectOpen((prev) => !prev)}
           className={`${
             slimFont.className
-          } text-[14px] w-[259px]  h-[45px] border 
+          } text-[14px] w-[550px]  h-[45px] border 
           } ${
             isSelectOpen
               ? " border-primary-violet border-b-0 rounded-t-[5px] "
+              : !isSelectOpen && showDepartmentError
+              ? "border-red-500 rounded-[5px]"
               : "rounded-[5px] border-secondary-border"
           }  flex items-center px-3 cursor-pointer justify-between relative`}
         >
           <div className="flex gap-2 items-center">
             <p className={`${thinFont.className} text-primary-headlines`}>
-              {status.name}
+              {department ? department.name : ""}
             </p>
           </div>
 
@@ -58,24 +66,25 @@ export default function CustomSelect({ statuses, setStatus, status }) {
         </div>
         {isSelectOpen && (
           <div
-            className={`w-[259px] border overflow-y-auto overflow-x-hidden  absolute $ border-primary-violet rounded-b-lg border-t-0 bg-white`}
+            className={`w-[550px] border overflow-y-auto overflow-x-hidden  absolute $ border-primary-violet rounded-b-lg border-t-0 bg-white z-30`}
             ref={contentRef}
           >
-            {statuses?.map((st) => (
+            {departments?.map((dep) => (
               <div
-                key={st.id}
+                key={dep.id}
                 className={`flex  px-3 gap-2 h-[42px]   hover:bg-gray-100 items-center`}
                 onClick={() => {
                   setIsSelectOpen(false);
-                  setStatus({ name: st.name, id: st.id });
+                  setDepartment({ name: dep.name, id: dep.id });
                   localStorage.setItem(
-                    "status",
-                    JSON.stringify({ name: st.name, id: st.id })
+                    "department",
+                    JSON.stringify({ name: dep.name, id: dep.id })
                   );
+                  setShowDepartmentError(false);
                 }}
               >
                 <p className={`${thinFont.className} text-primary-blackish`}>
-                  {st.name}
+                  {dep.name}
                 </p>
               </div>
             ))}

@@ -50,10 +50,12 @@ export default function EmployeeList({
           className={`${
             slimFont.className
           } text-[14px] w-[550px]  h-[45px] border ${
-            showEmployeeError ? "border-red-500" : "border-secondary-border"
-          } ${
-            isSelectOpen ? "border-b-0 rounded-t-[5px]" : "rounded-[5px]"
-          }  flex items-center px-3 cursor-pointer justify-between relative`}
+            isSelectOpen
+              ? " border-primary-violet border-b-0 rounded-t-[5px] "
+              : !isSelectOpen && showEmployeeError
+              ? "border-red-500 rounded-[5px]"
+              : "rounded-[5px] border-secondary-border"
+          } flex items-center px-3 cursor-pointer justify-between relative`}
         >
           <div className="flex gap-2 items-center">
             {employee.avatar && (
@@ -76,7 +78,7 @@ export default function EmployeeList({
         </div>
         {isSelectOpen && (
           <div
-            className="w-[550px] border overflow-y-auto overflow-x-hidden h-[185px] z-10 absolute bg-white border-secondary-border rounded-b-lg"
+            className="w-[550px] border overflow-y-auto overflow-x-hidden h-[185px] z-10 absolute bg-white border-primary-violet border-t-0 rounded-b-lg"
             ref={contentRef}
           >
             <AddNewEmployee

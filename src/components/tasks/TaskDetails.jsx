@@ -21,7 +21,6 @@ export default async function TaskDetails({ task }) {
     description,
     department,
     due_date,
-    total_comments,
     status,
   } = task;
   const date = formatDate(due_date);
@@ -42,7 +41,7 @@ export default async function TaskDetails({ task }) {
       : "text-primary-yellowish";
   return (
     <>
-      <div className="flex gap-[18px] items-center mt-[52px] h-[29px]">
+      <div className="flex gap-[18px] items-center mt-[152px] h-[29px]">
         <div className="flex justify-center gap-1 w-[86px] items-center">
           <Image src={priority.icon} alt="priority" width={16} height={18} />
           <p className={`${priorityColor} text-[16px]`}>{priority.name}</p>

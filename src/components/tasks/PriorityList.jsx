@@ -30,13 +30,14 @@ export default function PriorityList({ setPriority, priority, priorities }) {
         className={`${slimFont.className} text-[16px]  ${
           isSelectOpen ? "text-primary-violet" : "text-secondary-headlines"
         }`}
-        htmlFor="Priority_id"
+        htmlFor="priority"
       >
         პრიორიტეტი*
       </label>
 
       <div className={`${slimFont.className} relative text-[14px] `}>
         <div
+          id="priority"
           ref={buttonRef}
           onClick={() => setIsSelectOpen((prev) => !prev)}
           className={`${
