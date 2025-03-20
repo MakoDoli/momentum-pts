@@ -13,7 +13,11 @@ function FilterList() {
   };
 
   return (
-    <div className=" top-16 flex gap-2 items-center z-20 absolute min-h-[29px] w-[1700px]">
+    <div
+      className={` flex  gap-2 items-center z-20 absolute min-h-[29px] w-[1600px] ${
+        filters.length <= 5 ? "flex-nowrap top-[70px]" : "top-[52px]  flex-wrap"
+      }`}
+    >
       {filters.map((filter, index) => (
         <div
           key={index}
