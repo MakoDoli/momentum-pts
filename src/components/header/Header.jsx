@@ -9,7 +9,7 @@ export default async function Header() {
   const departments = await getDepartments();
 
   return (
-    <header className="h-[100px] bg-white flex items-center justify-between fixed inset-x-[120px] top-0 z-20">
+    <header className="h-[100px] bg-white flex items-center justify-between fixed  px-[120px] w-full top-0 z-20">
       <Link href="/">
         <Image
           src="/logos/logo-main.png"

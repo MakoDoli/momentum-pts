@@ -12,11 +12,11 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={`${mediumFont.className}  antialiased px-[120px]`}>
+      <body className={`${mediumFont.className}  antialiased `}>
         <ReactQueryProvider>
           <FilterProvider>
             <Header />
-            {children}
+            <main className="px-[120px]">{children}</main>
           </FilterProvider>
         </ReactQueryProvider>
       </body>
