@@ -202,10 +202,6 @@ export default function CreateNewTask({ departments, priorities, statuses }) {
                       value: 255,
                       message: "მაქსიმუმ 255 სიმბოლო",
                     },
-                    pattern: {
-                      value: /^[ა-ჰa-zA-Z]+$/i,
-                      message: "მხოლოდ ასოებია ნებადართული",
-                    },
                     onChange: () => setIsInitialState(false),
                   })}
                 />
