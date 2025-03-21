@@ -7,6 +7,13 @@ import { Controller, useForm } from "react-hook-form";
 import { slimFont, thinFont } from "@/app/fonts/fontWeigtht";
 import { useAddEmployee } from "@/hooks/useAddEmployese";
 import MinisSpinner from "../ui/MiniSpinner";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export default function CreateNewEmployee({
   setOpen,
@@ -64,7 +71,7 @@ export default function CreateNewEmployee({
 
     setTimeout(() => {
       setOpen();
-      setIsSelectOpen(false);
+      //setIsSelectOpen(false);
       if (setIsModalOpen) setIsModalOpen(false);
     }, 1000);
     addNewEmployee(formData);
@@ -351,26 +358,44 @@ export default function CreateNewEmployee({
           name="department_id"
           control={control}
           rules={{ required: "აირჩიეთ დეპარტამენტი" }}
-          render={({ field }) => (
-            <select
-              {...field}
-              className={`${thinFont.className} outline-none border border-1  ${
-                errors.department_id ? "border-red-500" : "border-gray-400"
-              } rounded-lg p-2 h-[42px] text-[14px] `}
-              id="dep_id"
-            >
-              <option value=""></option>
-              {departments?.map((department) => (
-                <option
-                  key={department.id}
-                  className={`${thinFont.className} `}
-                  value={department.id}
+          render={({ field }) => {
+            const selectedDepartment = departments.find(
+              (dep) => dep.id === Number(field.value)
+            );
+
+            return (
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <SelectTrigger
+                  className={`${thinFont.className} outline-none border ${
+                    errors.department_id ? "border-red-500" : "border-gray-400"
+                  } rounded-lg p-2 h-[42px] text-[14px]`}
                 >
-                  {department.name}
-                </option>
-              ))}
-            </select>
-          )}
+                  <SelectValue
+                    className={`${
+                      thinFont.className
+                    } outline-none border border-1  ${
+                      errors.department_id
+                        ? "border-red-500"
+                        : "border-gray-400"
+                    } rounded-lg p-2 h-[42px] text-[14px] `}
+                  >
+                    {selectedDepartment ? selectedDepartment.name : ""}
+                  </SelectValue>
+                </SelectTrigger>
+                <SelectContent className="border border-primary-violet">
+                  {departments?.map((department) => (
+                    <SelectItem
+                      key={department.id}
+                      value={department.id}
+                      className={`${thinFont.className} text-primary-blackish text-[14px] `}
+                    >
+                      {department.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            );
+          }}
         />
         {errors.department_id && (
           <p
