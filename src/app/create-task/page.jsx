@@ -16,7 +16,7 @@ export default async function page() {
   return (
     <div>
       <h1
-        className={`${boldFont.className} text-[34px] text-primary-headlines mt-10`}
+        className={`${boldFont.className} text-[34px] text-primary-headlines mt-[140px]`}
       >
         შექმენი ახალი დავალება
       </h1>

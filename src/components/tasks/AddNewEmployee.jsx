@@ -10,7 +10,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import CreateNewEmployee from "../employee/CreateNewEmployee";
-import { slimFont } from "@/app/fonts/fontWeigtht";
+import { mediumFont, slimFont } from "@/app/fonts/fontWeigtht";
 
 export default function AddNewEmployee({
   setIsModalOpen,
@@ -41,9 +41,11 @@ export default function AddNewEmployee({
         </div>
       </DialogTrigger>
       {open && (
-        <DialogContent className="flex h-full max-h-[784px]  flex-col max-w-[1009px]  items-center overflow-y-auto justify-center gap-8">
+        <DialogContent className="flex max-h-[766px]  flex-col max-w-[913px] h-screen px-[50px]  overflow-y-auto ">
           <DialogHeader className="items-center">
-            <DialogTitle className="text-[32px]">
+            <DialogTitle
+              className={`${mediumFont.className} text-[32px] font-medium mb-[45px] mt-[117px]`}
+            >
               თანამშრომლის დამატება
             </DialogTitle>
           </DialogHeader>

@@ -26,10 +26,10 @@ export default function EmployeeModal({ departments }) {
         </div>
       </DialogTrigger>
       {open && (
-        <DialogContent className="flex max-h-[766px]  flex-col max-w-[913px] h-screen  items-center overflow-y-auto justify-center gap-8 ">
+        <DialogContent className="flex max-h-[766px]  flex-col max-w-[913px] h-screen px-[50px]  overflow-y-auto ">
           <DialogHeader className="items-center">
             <DialogTitle
-              className={`${mediumFont.className} text-[32px] font-medium`}
+              className={`${mediumFont.className} text-[32px] font-medium mb-[45px] mt-[117px]`}
             >
               თანამშრომლის დამატება
             </DialogTitle>

@@ -109,7 +109,7 @@ export default function CreateNewEmployee({
           />
           {errors.name && (
             <p
-              className={`${slimFont.className} text-red-500 text-xs flex items-center gap-2`}
+              className={`${slimFont.className} text-red-500 text-[10px] flex items-center gap-2`}
             >
               <span>
                 <Image
@@ -123,13 +123,13 @@ export default function CreateNewEmployee({
             </p>
           )}
           {!errors.name && (
-            <>
+            <div className="space-y-0">
               <p
                 className={`${slimFont.className} ${
                   isInitialState.name
                     ? "text-primary-validation"
                     : "text-primary-green"
-                } text-xs flex items-center gap-2`}
+                } text-[10px] flex items-center h-4 gap-2`}
               >
                 <span>
                   <Image
@@ -150,7 +150,7 @@ export default function CreateNewEmployee({
                   isInitialState.name
                     ? "text-primary-validation"
                     : "text-primary-green"
-                } text-xs flex items-center gap-2`}
+                } text-[10px] flex items-center h-4 gap-2`}
               >
                 <span>
                   <Image
@@ -166,7 +166,7 @@ export default function CreateNewEmployee({
                 </span>
                 მაქსიმუმ 255 სიმბოლო
               </p>
-            </>
+            </div>
           )}
         </div>
 
@@ -203,7 +203,7 @@ export default function CreateNewEmployee({
           />
           {errors.surname && (
             <p
-              className={`${slimFont.className} text-red-500 text-xs flex items-center gap-2`}
+              className={`${slimFont.className} text-red-500 text-[10px] flex items-center gap-2`}
             >
               <span>
                 <Image
@@ -217,13 +217,13 @@ export default function CreateNewEmployee({
             </p>
           )}
           {!errors.surname && (
-            <div>
+            <div className="space-y-0">
               <p
                 className={`${slimFont.className} ${
                   isInitialState.surname
                     ? "text-primary-validation"
                     : "text-primary-green"
-                } text-xs flex items-center gap-2`}
+                } text-[10px] flex items-center h-4 gap-2`}
               >
                 <span>
                   <Image
@@ -244,7 +244,7 @@ export default function CreateNewEmployee({
                   isInitialState.surname
                     ? "text-primary-validation"
                     : "text-primary-green"
-                } text-xs flex items-center gap-2`}
+                } text-[10px] flex items-center h-4 gap-2`}
               >
                 <span>
                   <Image
@@ -264,7 +264,7 @@ export default function CreateNewEmployee({
           )}
         </div>
       </div>
-      <div className="mt-[45px] flex flex-col gap-3">
+      <div className="mt-[45px] flex flex-col gap-1">
         <label htmlFor="" className="text-secondary-headlines">
           ავატარი*
         </label>
@@ -355,7 +355,7 @@ export default function CreateNewEmployee({
               {...field}
               className={`${thinFont.className} outline-none border border-1  ${
                 errors.department_id ? "border-red-500" : "border-gray-400"
-              } rounded-lg p-2 h-[45px] text-[14px] `}
+              } rounded-lg p-2 h-[42px] text-[14px] `}
               id="dep_id"
             >
               <option value=""></option>
@@ -387,7 +387,7 @@ export default function CreateNewEmployee({
           </p>
         )}
       </div>
-      <div className="flex gap-[22px] h-[47px] justify-end w-full mt-[20px]">
+      <div className="flex gap-[22px] h-[42px] justify-end w-full mt-[20px]">
         <button
           onClick={setOpen}
           type="button"
