@@ -420,15 +420,13 @@ export default function CreateNewTask({ departments, priorities, statuses }) {
             </div>
           </div>
         </div>
-        <div className="flex gap-[31px] mb-[87px]  h-[47px] justify-end w-full mt-[147px]">
-          <button
-            className=" p-3 w-[187px] h-[47px] text-[16px] text-white bg-primary-violet hover:bg-secondary-violet hover-smooth rounded-[5px] "
-            disabled={isPending}
-            onClick={() => setIsInitialState(false)}
-          >
-            {isPending ? <MiniSpinner /> : "დავალების შექმნა"}
-          </button>
-        </div>
+        <button
+          className={`${slimFont.className} flex justify-center items-center w-[208px] h-[42px] text-[18px] text-white bg-primary-violet hover:bg-secondary-violet mb-[87px] hover-smooth ml-[1053px] mt-[144px] rounded-[5px]`}
+          disabled={isPending}
+          onClick={() => setIsInitialState(false)}
+        >
+          {isPending ? <MiniSpinner /> : "დავალების შექმნა"}
+        </button>
       </form>
     </div>
   );

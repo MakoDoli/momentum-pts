@@ -6,7 +6,7 @@ import FilterContainer from "@/components/filters/FilterContainer";
 
 export default function page() {
   return (
-    <div className="mt-[140px]">
+    <main className="mt-[140px]">
       <h1
         className={`${boldFont.className} text-[34px] text-primary-headlines mb-[52px] `}
       >
@@ -17,6 +17,6 @@ export default function page() {
       </FilterContainer>
       <StatusTitles />
       <TasksContainer />
-    </div>
+    </main>
   );
 }
