@@ -42,7 +42,9 @@ export default async function TaskDetails({ task }) {
   return (
     <>
       <div className="flex gap-[18px] items-center mt-[152px] h-[29px]">
-        <div className="flex justify-center gap-1 w-[86px] items-center">
+        <div
+          className={`flex justify-center border ${priorityColor} rounded-[3px] gap-1 w-[106px] h-8 items-center`}
+        >
           <Image src={priority.icon} alt="priority" width={16} height={18} />
           <p className={`${priorityColor} text-[16px]`}>{priority.name}</p>
         </div>
@@ -91,7 +93,7 @@ export default async function TaskDetails({ task }) {
                 taskId={task.id}
               />
             </div>
-            <div className="flex items-center justify-between mt-[31px] h-[70px] w-[493px]">
+            <div className="flex items-center mt-[31px] h-[70px] gap-[70px] w-[560px]">
               <div className="flex gap-[6px] h-6">
                 <Image
                   src="/icons/empl.svg"
@@ -105,7 +107,7 @@ export default async function TaskDetails({ task }) {
                   თანამშრომელი
                 </p>
               </div>
-              <div className="flex gap-[6px] w-[259px] h-[70px]">
+              <div className="flex gap-[6px] w-[290px] h-[70px]">
                 <div className="flex justify-center items-center">
                   <Image
                     src={employee.avatar}
@@ -117,12 +119,12 @@ export default async function TaskDetails({ task }) {
                 </div>
                 <div className="mt-2">
                   <p
-                    className={`${thinFont.className} text-secondary-gray text-[11px]`}
+                    className={`${thinFont.className} text-secondary-gray text-[11px] `}
                   >
                     {department.name}
                   </p>
                   <p
-                    className={`${slimFont.className} text-sm, text-secondary-headlines`}
+                    className={`${slimFont.className} text-sm  text-secondary-headlines`}
                   >
                     {employee.name} {employee.surname}
                   </p>
