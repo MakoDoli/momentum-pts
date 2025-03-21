@@ -168,13 +168,13 @@ export default function CreateNewTask({ departments, priorities, statuses }) {
   };
 
   return (
-    <div className="flex flex-col  relative  mt-[30px] bg-secondary-form">
+    <div className="flex flex-col relative  mt-[30px] bg-secondary-form">
       <form
-        className="flex flex-col ml-[55px] mt-[71px] "
+        className="flex flex-col ml-[55px] mt-[65px] "
         onSubmit={handleSubmit(submitFunction)}
       >
-        <div className="mb-[80px]">
-          <div className="flex gap-[161px] mt-[22px]">
+        <div className="">
+          <div className="flex gap-[161px] ">
             <div className="flex flex-col gap-[49px]">
               <div className="flex flex-col gap-1 w-[550px] h-[64px]">
                 <label
@@ -272,97 +272,82 @@ export default function CreateNewTask({ departments, priorities, statuses }) {
                 )}
               </div>
             </div>
-            <div className="flex flex-col gap-[49px]">
-              <div className="flex relative flex-col gap-1 w-[550px] h-[64px]">
-                <DepartmentSelect
-                  departments={departments}
-                  department={department}
-                  setDepartment={setDepartment}
-                  showDepartmentError={showDepartmentError}
-                  setShowDepartmentError={setShowDepartmentError}
-                />
-              </div>
+
+            <div className="flex relative flex-col gap-1 w-[550px] h-[64px]">
+              <DepartmentSelect
+                departments={departments}
+                department={department}
+                setDepartment={setDepartment}
+                showDepartmentError={showDepartmentError}
+                setShowDepartmentError={setShowDepartmentError}
+              />
             </div>
           </div>
         </div>
-        <div>
-          <div className="flex gap-[161px] mt-[49px]">
-            <div className="flex flex-col gap-[49px]">
-              <div className="flex flex-col gap-1 w-[550px]">
-                <label
-                  htmlFor="description"
-                  className={`${slimFont.className} text-[16px] text-secondary-headlines`}
-                >
-                  აღწერა
-                </label>
+        <div className="mt-[55px]">
+          <div className="flex gap-[161px]  mt-[49px] ">
+            <div className="flex flex-col gap-1 w-[550px]">
+              <label
+                htmlFor="description"
+                className={`${slimFont.className} text-[16px] text-secondary-headlines`}
+              >
+                აღწერა
+              </label>
 
-                <textarea
-                  className={`${
-                    thinFont.className
-                  } text-sm outline-none border border-1  ${
-                    errors.description
-                      ? "border-red-500"
-                      : "border-secondary-border"
-                  } rounded-[5px] p-3 h-[135px]`}
-                  id="description"
-                  {...register("description", {
-                    validate: (value) => {
-                      if (!value.trim()) return true;
-                      return (
-                        value.trim().split(/\s+/).length >= 4 ||
-                        "მინიმუმ ოთხი სიტყვა"
-                      );
-                    },
-                  })}
-                />
-                {errors.description && (
-                  <p
-                    className={`${slimFont.className} text-red-500 text-xs flex items-center gap-2`}
-                  >
-                    <span>
-                      <Image
-                        src="/icons/red-check.png"
-                        width={10}
-                        height={8}
-                        alt="check"
-                      />
-                    </span>
-                    {errors.description?.message}
-                  </p>
-                )}
-                {!errors.description && watch("description")?.trim() && (
-                  <p
-                    className={`${slimFont.className} ${
-                      isInitialState ? "text-black" : "text-primary-green"
-                    } text-xs flex items-center gap-2`}
-                  >
-                    <span>
-                      <Image
-                        src={
-                          isInitialState
-                            ? "/icons/check.png"
-                            : "/icons/green-check.png"
-                        }
-                        width={10}
-                        height={8}
-                        alt="check"
-                      />
-                    </span>
-                    მინიმუმ ოთხი სიტყვა
-                  </p>
-                )}
-              </div>
-            </div>
-            <div className="flex flex-col ">
-              {department.name && department.name !== "" && (
-                <EmployeeList
-                  filteredEmployees={filteredEmployees}
-                  showEmployeeError={showEmployeeError}
-                  employee={employee}
-                  setEmployee={setEmployee}
-                  departments={departments}
-                  setShowEmployeeError={setShowEmployeeError}
-                />
+              <textarea
+                className={`${
+                  thinFont.className
+                } text-sm outline-none border border-1  ${
+                  errors.description
+                    ? "border-red-500"
+                    : "border-secondary-border"
+                } rounded-[5px] p-3 h-[135px]`}
+                id="description"
+                {...register("description", {
+                  validate: (value) => {
+                    if (!value.trim()) return true;
+                    return (
+                      value.trim().split(/\s+/).length >= 4 ||
+                      "მინიმუმ ოთხი სიტყვა"
+                    );
+                  },
+                })}
+              />
+              {errors.description && (
+                <p
+                  className={`${slimFont.className} text-red-500 text-xs flex items-center gap-2`}
+                >
+                  <span>
+                    <Image
+                      src="/icons/red-check.png"
+                      width={10}
+                      height={8}
+                      alt="check"
+                    />
+                  </span>
+                  {errors.description?.message}
+                </p>
+              )}
+              {!errors.description && watch("description")?.trim() && (
+                <p
+                  className={`${slimFont.className} ${
+                    isInitialState ? "text-black" : "text-primary-green"
+                  } text-xs flex items-center gap-2`}
+                >
+                  <span>
+                    <Image
+                      src={
+                        isInitialState
+                          ? "/icons/check.png"
+                          : "/icons/green-check.png"
+                      }
+                      width={10}
+                      height={8}
+                      alt="check"
+                    />
+                  </span>
+                  მინიმუმ ოთხი სიტყვა
+                </p>
               )}
             </div>
           </div>
@@ -428,6 +413,18 @@ export default function CreateNewTask({ departments, priorities, statuses }) {
           {isPending ? <MiniSpinner /> : "დავალების შექმნა"}
         </button>
       </form>
+      <div className="flex flex-col absolute top-[240px] left-[766px] ">
+        {department.name && department.name !== "" && (
+          <EmployeeList
+            filteredEmployees={filteredEmployees}
+            showEmployeeError={showEmployeeError}
+            employee={employee}
+            setEmployee={setEmployee}
+            departments={departments}
+            setShowEmployeeError={setShowEmployeeError}
+          />
+        )}
+      </div>
     </div>
   );
 }

@@ -16,7 +16,7 @@ export default function CreateNewEmployee({
 }) {
   const onClose = () => {
     setOpen();
-    setIsModalOpen();
+    if (setIsModalOpen) setIsModalOpen();
   };
   const { addNewEmployee, isPending } = useAddEmployee();
 
@@ -65,6 +65,7 @@ export default function CreateNewEmployee({
     setTimeout(() => {
       setOpen();
       setIsSelectOpen(false);
+      if (setIsModalOpen) setIsModalOpen(false);
     }, 1000);
     addNewEmployee(formData);
   };
@@ -389,7 +390,7 @@ export default function CreateNewEmployee({
       </div>
       <div className="flex gap-[22px] h-[42px] justify-end w-full mt-[20px]">
         <button
-          onClick={setOpen}
+          onClick={onClose}
           type="button"
           className={`text-primary-headlines ${slimFont.className} text-[16px] w-[102px] h-[42px] flex justify-center items-center  border border-primary-violet hover:border-secondary-violet rounded-[5px] hover-smooth  cursor-pointer`}
         >
