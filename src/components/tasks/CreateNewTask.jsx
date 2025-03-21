@@ -426,21 +426,6 @@ export default function CreateNewTask({ departments, priorities, statuses }) {
         </div>
         <div className="flex gap-[31px] mb-[87px]  h-[47px] justify-end w-full mt-[147px]">
           <button
-            type="button"
-            className="border p-3 text-[16px] rounded-[5px]   hover:text-white"
-            onClick={() => {
-              localStorage.removeItem("TaskData");
-              localStorage.removeItem("employee");
-              localStorage.removeItem("priority");
-              localStorage.removeItem("status");
-              localStorage.removeItem("department");
-              router.push("/");
-            }}
-          >
-            გაუქმება
-          </button>
-
-          <button
             className=" p-3 w-[187px] h-[47px] text-[16px] text-white bg-primary-violet hover:bg-secondary-violet hover-smooth rounded-[5px] "
             disabled={isPending}
             onClick={() => setIsInitialState(false)}
