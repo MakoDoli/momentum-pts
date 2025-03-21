@@ -21,7 +21,7 @@ function FilterList() {
       {filters.map((filter, index) => (
         <div
           key={index}
-          className={`${slimFont.className} rounded-full flex items-center gap-1  text-[14px] min-h-[29px]  text-secondary-headlines px-[10px] opacity-80 border border-gray-300 `}
+          className={`${slimFont.className} rounded-full flex items-center gap-1  text-[14px] min-h-[29px]  text-secondary-headlines px-[10px]  border border-gray-300 `}
         >
           <p>{filter.value}</p>
           <Image
@@ -39,7 +39,7 @@ function FilterList() {
           className={`${slimFont.className} text-[14px] ml-4 cursor-pointer text-secondary-headlines`}
           onClick={() => setFilters([])}
         >
-          გასუფთავება
+          <p>გასუფთავება</p>
         </div>
       )}
     </div>

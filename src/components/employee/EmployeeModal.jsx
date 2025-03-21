@@ -22,7 +22,7 @@ export default function EmployeeModal({ departments }) {
           className={`text-primary-headlines ${slimFont.className} w-[225px] h-full flex justify-center items-center  border border-primary-violet hover:border-secondary-violet rounded-[5px] hover-smooth  cursor-pointer`}
           onClick={() => setOpen(true)}
         >
-          <p> თანამშრომლის შექმნა</p>
+          <p className="text-[16px]"> თანამშრომლის შექმნა</p>
         </div>
       </DialogTrigger>
       {open && (

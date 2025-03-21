@@ -29,7 +29,6 @@ const PrioritiesFilter = forwardRef(({ open, setOpen, data }, ref) => {
         updatedFilters.push({ type: "priority", value: option });
       }
     });
-
     setFilters(updatedFilters);
     setOpen(false);
   };

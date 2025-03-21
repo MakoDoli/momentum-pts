@@ -11,9 +11,11 @@ import {
 } from "@/service/data-service";
 
 export default async function FilterMenu() {
-  const departments = await getDepartments();
-  const priorities = await getPriorities();
-  const employees = await getEmployees();
+  const [departments, priorities, employees] = await Promise.all([
+    getDepartments(),
+    getPriorities(),
+    getEmployees(),
+  ]);
   return (
     <div className="flex relative justify-between items-center w-[688px] rounded-[10px]  mb-[78px]">
       <FilterList />

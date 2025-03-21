@@ -202,6 +202,10 @@ export default function CreateNewTask({ departments, priorities, statuses }) {
                       value: 255,
                       message: "მაქსიმუმ 255 სიმბოლო",
                     },
+                    pattern: {
+                      value: /^[ა-ჰa-zA-Z]+$/i,
+                      message: "მხოლოდ ასოებია ნებადართული",
+                    },
                     onChange: () => setIsInitialState(false),
                   })}
                 />
@@ -354,7 +358,7 @@ export default function CreateNewTask({ departments, priorities, statuses }) {
               </div>
             </div>
             <div className="flex flex-col ">
-              {department && department !== "" && (
+              {department.name && department.name !== "" && (
                 <EmployeeList
                   filteredEmployees={filteredEmployees}
                   showEmployeeError={showEmployeeError}
