@@ -62,10 +62,10 @@ export default function TaskCard({ task, statusName }) {
       : depNameSplit[0];
   const priorityColor =
     priority.id === 3
-      ? "text-primary-red"
+      ? "text-primary-red border-primary-red"
       : priority.id === 1
-      ? "text-primary-green"
-      : "text-primary-yellowish";
+      ? "text-primary-green border-primary-green"
+      : "text-primary-yellowish border-primary-yellowish";
 
   const formattedDate = format(new Date(due_date), "d MMM, yyyy", {
     locale: ka,
@@ -78,7 +78,9 @@ export default function TaskCard({ task, statusName }) {
     >
       <div className="flex justify-between h-6 items-center mb-[28px]">
         <div className="flex gap-[10px] items-center">
-          <div className="flex justify-center gap-1 w-[86px] items-center">
+          <div
+            className={`flex justify-center border ${priorityColor} rounded-[5px] gap-1 w-[86px] h-6 items-center`}
+          >
             <Image src={priority.icon} alt="priority" width={16} height={18} />
             <p className={`${priorityColor} text-[12px]`}>{priority.name}</p>
           </div>
